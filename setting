@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+
+class SettingScreen extends StatefulWidget {
+  const SettingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
+  bool _notificationsEnabled = true;
+  bool _darkModeEnabled = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('설정'),
+        centerTitle: true,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: [
+          // 1. 계정 섹션
+          const Text(
+            '계정',
+            style: TextStyle(
+              fontSize: 금색체크, // 기본 스타일 적용
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            leading: const CircleAvatar(
+              backgroundColor: Colors.blueAccent,
+              child: Icon(Icons.person, color: Colors.white),
+            ),
+            title: const Text('사용자 프로필'),
+            subtitle: const Text('계정 정보 수정 및 관리'),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            onTap: () {
+              // 프로필 화면으로 이동하는 로직 추가
+            },
+          ),
+          const Divider(height: 32),
+
+          // 2. 앱 설정 섹션
+          const Text(
+            '앱 설정',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 8),
+          SwitchListTile(
+            secondary: const Icon(Icons.notifications_outlined),
+            title: const Text('푸시 알림'),
+            value: _notificationsEnabled,
+            onChanged: (bool value) {
+              setState(() {
+                _notificationsEnabled = value;
+              });
+            },
+          ),
+          SwitchListTile(
+            secondary: const Icon(Icons.dark_mode_outlined),
+            title: const Text('다크 모드'),
+            value: _darkModeEnabled,
+            onChanged: (bool value) {
+              setState(() {
+                _darkModeEnabled = value;
+              });
+            },
+          ),
+          const Divider(height: 32),
+
+          // 3. 지원 및 정보 섹션
+          const Text(
+            '지원 및 정보',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('앱 버전'),
+            trailing: const Text('v1.0.0', style: TextStyle(color: Colors.grey)),
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: Colors.red),
+            title: const Text('로그아웃', style: TextStyle(color: Colors.red)),
+            onTap: () {
+              // 로그아웃 처리 로직 추가
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
