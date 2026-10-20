@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import '../models/user_model.dart';
 import 'auth_screen.dart';
+import 'setting_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -178,6 +179,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               '내 정보 (My Page)',
               style: TextStyle(color: darkGreen, fontWeight: FontWeight.bold),
             ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings_outlined, color: darkGreen),
+                tooltip: '설정',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SettingScreen()),
+                  );
+                },
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
@@ -355,6 +368,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 subtitle: const Text('AI 맞춤 추천을 위한 안전 필터 설정'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: _openHealthEditDialog,
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.settings_outlined, color: darkGreen),
+                title: const Text('앱 설정'),
+                subtitle: const Text('알림, 테마 및 계정 설정'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SettingScreen()),
+                  );
+                },
               ),
             ],
           ),

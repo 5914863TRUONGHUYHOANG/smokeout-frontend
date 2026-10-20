@@ -4,7 +4,7 @@ import 'services/api_service.dart';
 import 'screens/auth_screen.dart';
 import 'screens/exercise_screen.dart';
 import 'screens/ranking_screen.dart';
-import 'screens/coach_screen.dart';
+// import 'screens/coach_screen.dart';
 import 'screens/profile_screen.dart';
 
 void main() async {
@@ -63,15 +63,18 @@ class _MainTabControllerState extends State<MainTabController> {
       HomeScreen(onNavigateTab: _switchTab),
       const ExerciseScreen(),
       const RankingScreen(),
-      const CoachScreen(),
+      // const CoachScreen(), // Tạm ẩn tính năng AI 코치
       const ProfileScreen(),
     ];
 
+    final activeIndex = _currentIndex >= screens.length ? 0 : _currentIndex;
+
     return Scaffold(
       backgroundColor: MyApp.cream,
-      body: screens[_currentIndex],
+      body: screens[activeIndex],
       bottomNavigationBar: BottomAppBar(
         height: 68,
+        padding: EdgeInsets.zero,
         color: MyApp.cream,
         elevation: 0,
         child: Row(
@@ -80,32 +83,33 @@ class _MainTabControllerState extends State<MainTabController> {
             _BottomItem(
               icon: Icons.home,
               label: '홈',
-              selected: _currentIndex == 0,
+              selected: activeIndex == 0,
               onTap: () => _switchTab(0),
             ),
             _BottomItem(
               icon: Icons.directions_run,
               label: '운동',
-              selected: _currentIndex == 1,
+              selected: activeIndex == 1,
               onTap: () => _switchTab(1),
             ),
             _BottomItem(
               icon: Icons.emoji_events_outlined,
               label: '랭킹',
-              selected: _currentIndex == 2,
+              selected: activeIndex == 2,
               onTap: () => _switchTab(2),
             ),
-            _BottomItem(
-              icon: Icons.chat_outlined,
-              label: 'AI 코치',
-              selected: _currentIndex == 3,
-              onTap: () => _switchTab(3),
-            ),
+            // Tạm ẩn AI 코치
+            // _BottomItem(
+            //   icon: Icons.chat_outlined,
+            //   label: 'AI 코치',
+            //   selected: activeIndex == 3,
+            //   onTap: () => _switchTab(3),
+            // ),
             _BottomItem(
               icon: Icons.person_outline,
               label: 'MY',
-              selected: _currentIndex == 4,
-              onTap: () => _switchTab(4),
+              selected: activeIndex == 3,
+              onTap: () => _switchTab(3),
             ),
           ],
         ),
@@ -217,7 +221,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         )
                       : GestureDetector(
-                          onTap: () => onNavigateTab(4), // Chuyển sang tab MY
+                          onTap: () => onNavigateTab(3), // Chuyển sang tab MY
                           child: Chip(
                             backgroundColor: MyApp.lightGreen,
                             avatar: const Icon(Icons.person, color: MyApp.darkGreen, size: 16),
@@ -279,7 +283,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const Spacer(),
                           GestureDetector(
-                            onTap: () => onNavigateTab(4),
+                            onTap: () => onNavigateTab(3),
                             child: Container(
                               margin: const EdgeInsets.only(right: 5),
                               padding: const EdgeInsets.symmetric(
@@ -873,6 +877,7 @@ class _BottomItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
