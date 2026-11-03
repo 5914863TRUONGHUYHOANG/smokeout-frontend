@@ -1,370 +1,236 @@
 import 'package:flutter/material.dart';
-import 'profile_screen.dart';
+
+import 'exercise.dart';
+import 'login.dart' show LoginScreen;
+
 void main() {
-  runApp(const SmokeOutApp());
+  runApp(const MyApp());
 }
 
+// 앱 시작: 로그인 화면을 먼저 표시
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-const cream = Color(0xFFF8F7E9);
-const darkGreen = Color(0xFF3D5D2D);
-const green = Color(0xFF587B3D);
-const paleGreen = Color(0xFFEAF0D9);
-const borderGreen = Color(0xFFD2DDBD);
-const mutedText = Color(0xFF77796D);
-
-class SmokeOutApp extends StatelessWidget {
-  const SmokeOutApp({super.key});
+  // 테마 색상
+  static const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
+  static const Color card = Color.fromRGBO(253, 253, 246, 1.0);
+  static const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
+  static const Color green = Color.fromRGBO(91, 126, 61, 1.0);
+  static const Color lightGreen = Color.fromRGBO(232, 242, 207, 1.0);
+  static const Color litGreen = Color(0xFFEEF2DE);
+  static const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
+  static const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Smoke Out',
       theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: const Color(0xFFF5F9E9),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          primary: Colors.green,
-        ),
+        scaffoldBackgroundColor: HomeScreen.cream,
+        colorSchemeSeed: HomeScreen.darkGreen,
+        fontFamily: 'sans',
       ),
-      home: const MainProfileScreen(),
+      home: const LoginScreen(),
+      routes: {'/home': (context) => const HomeScreen()},
     );
   }
 }
 
-class MainProfileScreen {
-  const MainProfileScreen();
-}
+// 기존 홈 화면
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController();
-  final _password = TextEditingController();
-
-  bool _hidePassword = true;
-
-  @override
-  void dispose() {
-    _email.dispose();
-    _password.dispose();
-    super.dispose();
-  }
-
-  void _login() {
-    if (!_formKey.currentState!.validate()) return;
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('로그인 요청을 준비했습니다.'),
-      ),
-    );
-
-    // TODO: Connect to your backend login API.
-  }
-
-  void _message(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
-  InputDecoration _decoration({
-    required String hint,
-    required IconData icon,
-    Widget? suffix,
-  }) {
-    return InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(
-        color: Color(0xFFAAA99D),
-        fontSize: 14,
-      ),
-      prefixIcon: Icon(icon, color: green, size: 21),
-      suffixIcon: suffix,
-      filled: true,
-      fillColor: const Color(0xFFFFFEF8),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 17,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: borderGreen),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: borderGreen),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(
-          color: green,
-          width: 1.7,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: Colors.redAccent),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: Colors.redAccent),
-      ),
-    );
-  }
+  static const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
+  static const Color card = Color.fromRGBO(253, 253, 246, 1.0);
+  static const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
+  static const Color green = Color.fromRGBO(91, 126, 61, 1.0);
+  static const Color lightGreen = Color.fromRGBO(232, 242, 207, 1.0);
+  static const Color litGreen = Color(0xFFEEF2DE);
+  static const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
+  static const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
-                child: Column(
-                  children: [
-                    // Cute mascot header
-                    const MascotHeader(),
+      backgroundColor: cream,
 
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        26, 25, 26, 28,
-                      ),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxWidth: 430,
+      // -------------------------
+      // 상단
+      // -------------------------
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: cream,
+        elevation: 0,
+
+        toolbarHeight: 130,
+        titleSpacing: 0,
+
+        title: Stack(
+          children: [
+            Image.asset(
+              'assets/SmokeOut_banner.png',
+              width: double.infinity,
+              height: 130,
+              fit: BoxFit.cover,
+            ),
+
+            Positioned(
+              left: 25,
+              top: 25,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  Row(
+                    children: [
+                      const Text(
+                        'Smoke Out',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                          color: darkGreen,
                         ),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.stretch,
+                      ),
+                      const Icon(Icons.eco, color: green, size: 22),
+                    ],
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  const Text(
+                    '조금씩 더 건강한 나를 위해',
+                    style: TextStyle(fontSize: 12, color: textGray),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // -------------------------
+      // 본문
+      // -------------------------
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // ==================================================
+            // 금연 현황
+            // ==================================================
+            Container(
+              height: 120,
+              margin: const EdgeInsets.fromLTRB(6, 3, 6, 6),
+              padding: const EdgeInsets.only(top: 4),
+
+              decoration: BoxDecoration(
+                color: card,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: borderGreen, width: 1.5),
+              ),
+
+              child: Column(
+                children: [
+                  // 제목 + 상세보기
+                  Row(
+                    children: [
+                      const SizedBox(width: 5),
+
+                      const Icon(
+                        Icons.leaderboard_outlined,
+                        color: darkGreen,
+                        size: 21,
+                      ),
+
+                      const SizedBox(width: 2),
+
+                      const Text(
+                        '금연 현황',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: darkGreen,
+                        ),
+                      ),
+
+                      const Spacer(),
+
+                      Container(
+                        margin: const EdgeInsets.only(right: 5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+
+                        decoration: BoxDecoration(
+                          color: lightGreen,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+
+                        child: const Row(
+                          children: [
+                            Text(
+                              '상세보기',
+                              style: TextStyle(fontSize: 12, color: darkGreen),
+                            ),
+
+                            Icon(
+                              Icons.chevron_right,
+                              size: 17,
+                              color: darkGreen,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  // 금연 현황 3개
+                  SizedBox(
+                    height: 65,
+                    child: Row(
+                      children: [
+                        // 금연한 일
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                '다시 만나요! 🍃',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.w800,
-                                  color: darkGreen,
-                                ),
-                              ),
-                              const SizedBox(height: 7),
-                              const Text(
-                                '오늘도 건강한 나를 위해 시작해요.',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: mutedText,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
+                              const SizedBox(width: 10),
 
-                              const FieldLabel('이메일'),
-                              const SizedBox(height: 9),
-
-                              TextFormField(
-                                controller: _email,
-                                keyboardType:
-                                    TextInputType.emailAddress,
-                                textInputAction:
-                                    TextInputAction.next,
-                                decoration: _decoration(
-                                  hint: '이메일을 입력하세요',
-                                  icon: Icons.mail_outline_rounded,
-                                ),
-                                validator: (value) {
-                                  final text = value?.trim() ?? '';
-                                  if (text.isEmpty) {
-                                    return '이메일을 입력해 주세요.';
-                                  }
-                                  if (!RegExp(
-                                    r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                                  ).hasMatch(text)) {
-                                    return '올바른 이메일을 입력해 주세요.';
-                                  }
-                                  return null;
-                                },
+                              const Icon(
+                                Icons.calendar_month,
+                                color: darkGreen,
+                                size: 22,
                               ),
 
-                              const SizedBox(height: 19),
-                              const FieldLabel('비밀번호'),
-                              const SizedBox(height: 9),
+                              const SizedBox(width: 5),
 
-                              TextFormField(
-                                controller: _password,
-                                obscureText: _hidePassword,
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) => _login(),
-                                decoration: _decoration(
-                                  hint: '비밀번호를 입력하세요',
-                                  icon: Icons.lock_outline_rounded,
-                                  suffix: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _hidePassword =
-                                            !_hidePassword;
-                                      });
-                                    },
-                                    icon: Icon(
-                                      _hidePassword
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
-                                      color: mutedText,
-                                      size: 21,
-                                    ),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null ||
-                                      value.isEmpty) {
-                                    return '비밀번호를 입력해 주세요.';
-                                  }
-                                  if (value.length < 6) {
-                                    return '비밀번호는 6자 이상 입력해 주세요.';
-                                  }
-                                  return null;
-                                },
-                              ),
-
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () => _message(
-                                    '비밀번호 찾기 화면을 연결해 주세요.',
-                                  ),
-                                  child: const Text(
-                                    '비밀번호 찾기',
-                                    style: TextStyle(
-                                      color: green,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 8),
-
-                              SizedBox(
-                                height: 55,
-                                child: ElevatedButton(
-                                  onPressed: _login,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: green,
-                                    foregroundColor: Colors.white,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(16),
-                                    ),
-                                  ),
-                                  child: const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '로그인',
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Icon(
-                                        Icons.arrow_forward_rounded,
-                                        size: 20,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 21),
-
-                              const Row(
-                                children: [
-                                  Expanded(
-                                    child: Divider(
-                                      color: borderGreen,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 13,
-                                    ),
-                                    child: Text(
-                                      '아직 회원이 아니신가요?',
-                                      style: TextStyle(
-                                        color: mutedText,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Divider(
-                                      color: borderGreen,
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 17),
-
-                              OutlinedButton(
-                                onPressed: () => _message(
-                                  '회원가입 화면을 연결해 주세요.',
-                                ),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: darkGreen,
-                                  minimumSize:
-                                      const Size.fromHeight(52),
-                                  side: const BorderSide(
-                                    color: borderGreen,
-                                    width: 1.3,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(15),
-                                  ),
-                                ),
-                                child: const Text(
-                                  '회원가입',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 23),
-
-                              const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.eco_rounded,
-                                    size: 15,
-                                    color: green,
-                                  ),
-                                  SizedBox(width: 6),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
                                   Text(
-                                    '작은 변화가 만드는 건강한 내일',
+                                    '금연한 일',
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: mutedText,
+                                      color: textGray,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    '15일',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: darkGreen,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    '(2025.09.13)',
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: textGray,
                                     ),
                                   ),
                                 ],
@@ -372,186 +238,625 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
 
-class FieldLabel extends StatelessWidget {
-  final String text;
+                        // 구분선
+                        Container(width: 1, height: 60, color: borderGreen),
 
-  const FieldLabel(this.text, {super.key});
+                        // 참은 담배
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(width: 10),
 
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 14,
-        color: darkGreen,
-        fontWeight: FontWeight.w700,
-      ),
-    );
-  }
-}
+                              Image.asset(
+                                'assets/smoke_free.png',
+                                width: 24,
+                                height: 24,
+                              ),
 
-// Header with a mascot drawn directly in Flutter.
-class MascotHeader extends StatelessWidget {
-  const MascotHeader({super.key});
+                              const SizedBox(width: 5),
 
-  @override
-  Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: HeaderClipper(),
-      child: Container(
-        width: double.infinity,
-        height: 295,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFF0F2DE),
-              Color(0xFFE0E9C8),
-            ],
-          ),
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: -30,
-              bottom: -45,
-              child: _hill(190, 115, const Color(0xFFD6E1BD)),
-            ),
-            Positioned(
-              right: -25,
-              bottom: -60,
-              child: _hill(220, 145, const Color(0xFFC8D8AA)),
-            ),
-            Positioned(
-              left: 12,
-              top: 22,
-              child: _leaf(25, -0.6),
-            ),
-            Positioned(
-              left: 42,
-              top: 120,
-              child: _leaf(17, 0.5),
-            ),
-            Positioned(
-              right: 34,
-              top: 30,
-              child: _leaf(24, 0.8),
-            ),
-            Positioned(
-              right: 24,
-              top: 145,
-              child: _leaf(17, -0.5),
-            ),
-            Positioned(
-              left: 27,
-              top: 33,
-              child: Row(
-                children: [
-                  const Text(
-                    'Smoke Out',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -1.0,
-                      color: darkGreen,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Transform.rotate(
-                    angle: -0.35,
-                    child: const Icon(
-                      Icons.eco_rounded,
-                      color: green,
-                      size: 28,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    '참은 담배',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: textGray,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    '300개비',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: darkGreen,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    '(2025.09.13)',
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: textGray,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // 구분선
+                        Container(width: 1, height: 60, color: borderGreen),
+
+                        // 아낀 금액
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(width: 10),
+
+                              const Icon(
+                                Icons.payment,
+                                color: darkGreen,
+                                size: 22,
+                              ),
+
+                              const SizedBox(width: 5),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    '아낀 금액',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: textGray,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    '120,000원',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: darkGreen,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    '(1갑 4000원 기준)',
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: textGray,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-            const Positioned(
-              left: 29,
-              top: 78,
-              child: Text(
-                '조금씩 더 건강한 나를 위해',
-                style: TextStyle(
-                  color: mutedText,
-                  fontSize: 14,
+
+            // ==================================================
+            // 랭킹 + 운동하기
+            // ==================================================
+            Row(
+              children: [
+                // 랭킹
+                Expanded(
+                  child: Container(
+                    height: 110,
+                    margin: const EdgeInsets.fromLTRB(6, 3, 3, 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+
+                    decoration: BoxDecoration(
+                      color: litGreen,
+                      borderRadius: BorderRadius.circular(17),
+                      border: Border.all(color: borderGreen, width: 1.5),
+                    ),
+
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.emoji_events,
+                          size: 43,
+                          color: darkGreen,
+                        ),
+
+                        const SizedBox(width: 8),
+
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                '랭킹',
+                                style: TextStyle(
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.bold,
+                                  color: darkGreen,
+                                ),
+                              ),
+
+                              Text(
+                                '현재 나의 순위',
+                                style: TextStyle(fontSize: 11, color: textGray),
+                              ),
+
+                              Text(
+                                '1위',
+                                style: TextStyle(
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.bold,
+                                  color: darkGreen,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const Icon(
+                          Icons.chevron_right,
+                          size: 28,
+                          color: darkGreen,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
+
+                // 운동하기
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const ExerciseScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 110,
+                      margin: const EdgeInsets.fromLTRB(3, 3, 6, 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+
+                      decoration: BoxDecoration(
+                        color: green,
+                        borderRadius: BorderRadius.circular(17),
+                      ),
+
+                      child: Row(
+                        children: [
+                          Icon(Icons.fitness_center, size: 43, color: cream),
+
+                          const SizedBox(width: 5),
+
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  '운동하기',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                    color: cream,
+                                  ),
+                                ),
+
+                                Text(
+                                  '오늘도 금연 성공해요!',
+                                  style: TextStyle(fontSize: 10, color: cream),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const Icon(
+                            Icons.chevron_right,
+                            color: cream,
+                            size: 28,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            // ==================================================
+            // 운동 현황
+            // ==================================================
+            Container(
+              height: 165,
+              margin: const EdgeInsets.fromLTRB(6, 3, 6, 5),
+              padding: const EdgeInsets.fromLTRB(7, 5, 7, 8),
+
+              decoration: BoxDecoration(
+                color: card,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: borderGreen, width: 1.5),
+              ),
+
+              child: Column(
+                children: [
+                  // 제목
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.directions_run,
+                        color: darkGreen,
+                        size: 20,
+                      ),
+
+                      const SizedBox(width: 3),
+
+                      const Text(
+                        '운동 현황',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: darkGreen,
+                        ),
+                      ),
+
+                      const Spacer(),
+
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+
+                        decoration: BoxDecoration(
+                          color: lightGreen,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+
+                        child: const Text(
+                          '오늘도 화이팅!',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // 운동 정보
+                  Expanded(
+                    child: Row(
+                      children: [
+                        // 걸음 수
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+
+                            decoration: BoxDecoration(
+                              color: litGreen,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.directions_walk,
+                                  size: 38,
+                                  color: darkGreen,
+                                ),
+
+                                SizedBox(width: 7),
+
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '오늘의 걸음 수',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: textGray,
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 3),
+
+                                    Text(
+                                      '8,431 걸음',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: darkGreen,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(width: 8),
+
+                        // 소모 칼로리
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+
+                            decoration: BoxDecoration(
+                              color: litGreen,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.local_fire_department,
+                                  size: 34,
+                                  color: darkGreen,
+                                ),
+
+                                SizedBox(width: 7),
+
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '오늘의 소모 칼로리',
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: textGray,
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 3),
+
+                                    Text(
+                                      '125,345 kcal',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: darkGreen,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+                ],
               ),
             ),
-            // Display image directly instead of CustomPain
-            Positioned(
-              right: 25,
-              bottom: -10,
-              child: Image.asset(
-                'assets/cat_mascot.png',
-                width: 170,
-                height: 160,
-                fit: BoxFit.contain,
+
+            // ==================================================
+            // 금연의 이로움
+            // ==================================================
+            Container(
+              margin: const EdgeInsets.fromLTRB(6, 3, 6, 10),
+              padding: const EdgeInsets.all(12),
+
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(239, 246, 220, 1.0),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: borderGreen, width: 1.5),
+              ),
+
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 제목
+                  Row(
+                    children: const [
+                      Icon(Icons.eco, color: darkGreen, size: 23),
+
+                      SizedBox(width: 4),
+
+                      Text(
+                        '금연의 이로움',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: darkGreen,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 3),
+
+                  const Text(
+                    '금연을 시작한 순간부터 몸은 회복되기 시작해요.',
+                    style: TextStyle(fontSize: 10, color: textGray),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  _BenefitItem(
+                    time: '20분',
+                    text: '혈압과 심장박동이 정상으로 돌아오고 손발 체온이 상승합니다.',
+                  ),
+
+                  _BenefitItem(
+                    time: '12시간',
+                    text: '혈중 산소량이 정상으로 올라가고 일산화탄소 수치가 정상화됩니다.',
+                  ),
+
+                  _BenefitItem(
+                    time: '2주~3개월',
+                    text: '혈액순환이 원활해지고 폐 기능이 향상됩니다.',
+                  ),
+
+                  _BenefitItem(time: '1년', text: '심장마비 및 심장병 발생 위험이 감소합니다.'),
+
+                  _BenefitItem(time: '10년', text: '폐암 및 각종 암 위험이 크게 낮아집니다.'),
+
+                  _BenefitItem(time: '15년', text: '심혈관질환 위험이 비흡연자 수준으로 낮아집니다.'),
+                ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
 
-  Widget _hill(double width, double height, Color color) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.elliptical(width, height),
+      // ==================================================
+      // 하단 네비게이션
+      // ==================================================
+      bottomNavigationBar: BottomAppBar(
+        height: 68,
+        color: cream,
+        elevation: 0,
+
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: const [
+            _BottomItem(icon: Icons.home, label: '홈', selected: true),
+
+            _BottomItem(
+              icon: Icons.directions_run,
+              label: '운동',
+              page: ExerciseScreen(),
+            ),
+
+            _BottomItem(icon: Icons.emoji_events_outlined, label: '랭킹'),
+
+            _BottomItem(icon: Icons.person_outline, label: 'MY'),
+          ],
         ),
       ),
     );
   }
+}
 
-  Widget _leaf(double size, double angle) {
-    return Transform.rotate(
-      angle: angle,
-      child: Icon(
-        Icons.eco_rounded,
-        size: size,
-        color: const Color(0xFFA8BE80),
+// ==========================================================
+// 금연의 이로움 한 줄
+// ==========================================================
+class _BenefitItem extends StatelessWidget {
+  final String time;
+  final String text;
+
+  const _BenefitItem({required this.time, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+          // 시간
+          Container(
+            width: 65,
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
+
+            decoration: BoxDecoration(
+              color: MyApp.green,
+              borderRadius: BorderRadius.circular(15),
+            ),
+
+            child: Text(
+              time,
+              textAlign: TextAlign.center,
+
+              style: const TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: MyApp.cream,
+              ),
+            ),
+          ),
+
+          const SizedBox(width: 8),
+
+          // 설명
+          Expanded(
+            child: Text(
+              text,
+
+              style: const TextStyle(
+                fontSize: 10,
+                height: 1.3,
+                color: MyApp.textGray,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class HeaderClipper extends CustomClipper<Path> {
+// ==========================================================
+// 하단 네비게이션 아이템
+// ==========================================================
+
+class _BottomItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final Widget? page;
+
+  const _BottomItem({
+    required this.icon,
+    required this.label,
+    this.selected = false,
+    this.page,
+  });
+
   @override
-  Path getClip(Size size) {
-    return Path()
-      ..lineTo(0, size.height - 17)
-      ..quadraticBezierTo(
-        size.width * 0.5,
-        size.height + 7,
-        size.width,
-        size.height - 17,
-      )
-      ..lineTo(size.width, 0)
-      ..close();
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: page == null
+          ? null
+          : () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => page!),
+              );
+            },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 23,
+            color: selected ? MyApp.darkGreen : Colors.black45,
+          ),
+
+          const SizedBox(height: 2),
+
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 10,
+              color: selected ? MyApp.darkGreen : Colors.black45,
+              fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
   }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
-
-// Cute sleeping cat with a leaf headband.
