@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'profile_screen.dart';
 void main() {
   runApp(const SmokeOutApp());
 }
+
 
 const cream = Color(0xFFF8F7E9);
 const darkGreen = Color(0xFF3D5D2D);
@@ -20,16 +22,22 @@ class SmokeOutApp extends StatelessWidget {
       title: 'Smoke Out',
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: cream,
+        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: const Color(0xFFF5F9E9),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: green,
-          primary: green,
+          seedColor: Colors.green,
+          primary: Colors.green,
         ),
       ),
-      home: const LoginScreen(),
+      home: const MainProfileScreen(),
     );
   }
 }
+
+class MainProfileScreen {
+  const MainProfileScreen();
+}
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
