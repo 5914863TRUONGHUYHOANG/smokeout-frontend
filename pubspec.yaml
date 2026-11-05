@@ -24,4 +24,7 @@ flutter:
 
   assets:
     - assets/cat_mascot.png
+    - assets/SmokeOut_banner.png
+    - assets/SmokeOut_exercise.png
+    - assets/smoke_free.png
     

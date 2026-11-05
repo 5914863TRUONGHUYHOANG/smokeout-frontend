@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'exercise_dialog.dart';
+import 'profile_screen.dart';
 
 
 class ExerciseScreen extends StatelessWidget {
@@ -242,7 +243,16 @@ class ExerciseScreen extends StatelessWidget {
               selected: true,
             ),
             _BottomItem(icon: Icons.emoji_events_outlined, label: '랭킹'),
-            _BottomItem(icon: Icons.person_outline, label: 'MY'),
+            _BottomItem(
+              icon: Icons.person_outline,
+              label: 'MY',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+            ),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'exercise.dart';
 import 'login.dart' show LoginScreen;
+import 'profile_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -154,31 +155,41 @@ class HomeScreen extends StatelessWidget {
 
                       const Spacer(),
 
-                      Container(
-                        margin: const EdgeInsets.only(right: 5),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
-                        ),
-
-                        decoration: BoxDecoration(
-                          color: lightGreen,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-
-                        child: const Row(
-                          children: [
-                            Text(
-                              '상세보기',
-                              style: TextStyle(fontSize: 12, color: darkGreen),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ProfileScreen(),
                             ),
+                          );
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 5),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 5,
+                          ),
 
-                            Icon(
-                              Icons.chevron_right,
-                              size: 17,
-                              color: darkGreen,
-                            ),
-                          ],
+                          decoration: BoxDecoration(
+                            color: lightGreen,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+
+                          child: const Row(
+                            children: [
+                              Text(
+                                '상세보기',
+                                style: TextStyle(fontSize: 12, color: darkGreen),
+                              ),
+
+                              Icon(
+                                Icons.chevron_right,
+                                size: 17,
+                                color: darkGreen,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -740,7 +751,11 @@ class HomeScreen extends StatelessWidget {
 
             _BottomItem(icon: Icons.emoji_events_outlined, label: '랭킹'),
 
-            _BottomItem(icon: Icons.person_outline, label: 'MY'),
+            _BottomItem(
+              icon: Icons.person_outline,
+              label: 'MY',
+              page: ProfileScreen(),
+            ),
           ],
         ),
       ),
