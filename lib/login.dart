@@ -1,13 +1,53 @@
 import 'package:flutter/material.dart';
-import 'profile_screen.dart';
 
-const cream = Color(0xFFF8F7E9);
-const darkGreen = Color(0xFF3D5D2D);
-const green = Color(0xFF587B3D);
-const paleGreen = Color(0xFFEAF0D9);
-const borderGreen = Color(0xFFD2DDBD);
-const mutedText = Color(0xFF77796D);
+void main() {
+  runApp(const SmokeOutApp());
+}
 
+/* ============================================================
+   Theme Colors — global constants used across all screens
+   ============================================================ */
+const Color cream = Color(0xFFF8F7E9);
+const Color card = Color(0xFFFDFDF6);
+const Color darkGreen = Color(0xFF315C29);
+const Color mainGreen = Color(0xFF4D8039);
+const Color green = Color(0xFF587B3D);
+const Color lightGreen = Color(0xFFE5F0D1);
+const Color paleGreen = Color(0xFFF5F9E9);
+const Color litGreen = Color(0xFFEEF2DE);
+const Color borderGreen = Color(0xFFD2DDBD);
+const Color grayText = Color(0xFF777B70);
+const Color mutedText = Color(0xFF77796D);
+
+/* ============================================================
+   App Root
+   ============================================================ */
+class SmokeOutApp extends StatelessWidget {
+  const SmokeOutApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Smoke Out',
+      theme: ThemeData(
+        useMaterial3: true,
+        fontFamily: 'Roboto',
+        scaffoldBackgroundColor: paleGreen,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          primary: mainGreen,
+        ),
+      ),
+      // Entry point = Login screen
+      home: const LoginScreen(),
+    );
+  }
+}
+
+/* ============================================================
+   1) LOGIN SCREEN
+   ============================================================ */
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -17,9 +57,8 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController(text: 'test@gmail.com');
-  final _password = TextEditingController(text: 'password123');
-
+  final _email = TextEditingController();
+  final _password = TextEditingController();
   bool _hidePassword = true;
 
   @override
@@ -32,22 +71,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void _login() {
     if (!_formKey.currentState!.validate()) return;
 
-    final email = _email.text.trim();
-    final nickname = email.contains('@') ? email.split('@').first : 'SmokeFreeHero';
-    userProfileNotifier.value = UserProfileData(
-      nickname: nickname.isNotEmpty ? nickname : 'SmokeFreeHero',
-      email: email,
-      fitnessLevel: 'BEGINNER',
-      totalPoints: 1250,
-    );
-
+    // TODO: connect backend login API
     Navigator.pushReplacementNamed(context, '/home');
   }
 
   void _message(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   InputDecoration _decoration({
@@ -55,43 +85,24 @@ class _LoginScreenState extends State<LoginScreen> {
     required IconData icon,
     Widget? suffix,
   }) {
+    OutlineInputBorder b(Color c, [double w = 1]) => OutlineInputBorder(
+      borderRadius: BorderRadius.circular(15),
+      borderSide: BorderSide(color: c, width: w),
+    );
+
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(
-        color: Color(0xFFAAA99D),
-        fontSize: 14,
-      ),
+      hintStyle: const TextStyle(color: Color(0xFFAAA99D), fontSize: 14),
       prefixIcon: Icon(icon, color: green, size: 21),
       suffixIcon: suffix,
       filled: true,
       fillColor: const Color(0xFFFFFEF8),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 17,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: borderGreen),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: borderGreen),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(
-          color: green,
-          width: 1.7,
-        ),
-      ),
-      errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: Colors.redAccent),
-      ),
-      focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: Colors.redAccent),
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 17),
+      border: b(borderGreen),
+      enabledBorder: b(borderGreen),
+      focusedBorder: b(green, 1.7),
+      errorBorder: b(Colors.redAccent),
+      focusedErrorBorder: b(Colors.redAccent),
     );
   }
 
@@ -103,25 +114,14 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context, constraints) {
             return SingleChildScrollView(
               child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight,
-                ),
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: Column(
                   children: [
-                    // Cute mascot header
                     const MascotHeader(),
-
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(
-                        26,
-                        25,
-                        26,
-                        28,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(26, 25, 26, 28),
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxWidth: 430,
-                        ),
+                        constraints: const BoxConstraints(maxWidth: 430),
                         child: Form(
                           key: _formKey,
                           child: Column(
@@ -147,7 +147,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                               const FieldLabel('이메일'),
                               const SizedBox(height: 9),
-
                               TextFormField(
                                 controller: _email,
                                 keyboardType: TextInputType.emailAddress,
@@ -158,12 +157,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 validator: (value) {
                                   final text = value?.trim() ?? '';
-                                  if (text.isEmpty) {
-                                    return '이메일을 입력해 주세요.';
-                                  }
-                                  if (!RegExp(
-                                    r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                                  ).hasMatch(text)) {
+                                  if (text.isEmpty) return '이메일을 입력해 주세요.';
+                                  if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+                                      .hasMatch(text)) {
                                     return '올바른 이메일을 입력해 주세요.';
                                   }
                                   return null;
@@ -173,7 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               const SizedBox(height: 19),
                               const FieldLabel('비밀번호'),
                               const SizedBox(height: 9),
-
                               TextFormField(
                                 controller: _password,
                                 obscureText: _hidePassword,
@@ -183,11 +178,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hint: '비밀번호를 입력하세요',
                                   icon: Icons.lock_outline_rounded,
                                   suffix: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _hidePassword = !_hidePassword;
-                                      });
-                                    },
+                                    onPressed: () => setState(
+                                      () => _hidePassword = !_hidePassword,
+                                    ),
                                     icon: Icon(
                                       _hidePassword
                                           ? Icons.visibility_off_outlined
@@ -211,9 +204,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
-                                  onPressed: () => _message(
-                                    '비밀번호 찾기 화면을 연결해 주세요.',
-                                  ),
+                                  onPressed: () =>
+                                      _message('비밀번호 찾기 화면을 연결해 주세요.'),
                                   child: const Text(
                                     '비밀번호 찾기',
                                     style: TextStyle(
@@ -226,7 +218,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
 
                               const SizedBox(height: 8),
-
                               SizedBox(
                                 height: 55,
                                 child: ElevatedButton(
@@ -260,14 +251,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
 
                               const SizedBox(height: 21),
-
                               const Row(
                                 children: [
-                                  Expanded(
-                                    child: Divider(
-                                      color: borderGreen,
-                                    ),
-                                  ),
+                                  Expanded(child: Divider(color: borderGreen)),
                                   Padding(
                                     padding: EdgeInsets.symmetric(
                                       horizontal: 13,
@@ -280,20 +266,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Divider(
-                                      color: borderGreen,
-                                    ),
-                                  ),
+                                  Expanded(child: Divider(color: borderGreen)),
                                 ],
                               ),
 
                               const SizedBox(height: 17),
-
                               OutlinedButton(
-                                onPressed: () => _message(
-                                  '회원가입 화면을 연결해 주세요.',
-                                ),
+                                onPressed: () => _message('회원가입 화면을 연결해 주세요.'),
                                 style: OutlinedButton.styleFrom(
                                   foregroundColor: darkGreen,
                                   minimumSize: const Size.fromHeight(52),
@@ -315,7 +294,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
 
                               const SizedBox(height: 23),
-
                               const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -352,7 +330,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
 class FieldLabel extends StatelessWidget {
   final String text;
-
   const FieldLabel(this.text, {super.key});
 
   @override
@@ -368,6 +345,7 @@ class FieldLabel extends StatelessWidget {
   }
 }
 
+/* ---------- Login header (mascot) ---------- */
 class MascotHeader extends StatelessWidget {
   const MascotHeader({super.key});
 
@@ -382,10 +360,7 @@ class MascotHeader extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFFF0F2DE),
-              Color(0xFFE0E9C8),
-            ],
+            colors: [Color(0xFFF0F2DE), Color(0xFFE0E9C8)],
           ),
         ),
         child: Stack(
@@ -400,26 +375,10 @@ class MascotHeader extends StatelessWidget {
               bottom: -60,
               child: _hill(220, 145, const Color(0xFFC8D8AA)),
             ),
-            Positioned(
-              left: 12,
-              top: 22,
-              child: _leaf(25, -0.6),
-            ),
-            Positioned(
-              left: 42,
-              top: 120,
-              child: _leaf(17, 0.5),
-            ),
-            Positioned(
-              right: 34,
-              top: 30,
-              child: _leaf(24, 0.8),
-            ),
-            Positioned(
-              right: 24,
-              top: 145,
-              child: _leaf(17, -0.5),
-            ),
+            Positioned(left: 12, top: 22, child: _leaf(25, -0.6)),
+            Positioned(left: 42, top: 120, child: _leaf(17, 0.5)),
+            Positioned(right: 34, top: 30, child: _leaf(24, 0.8)),
+            Positioned(right: 24, top: 145, child: _leaf(17, -0.5)),
             Positioned(
               left: 27,
               top: 33,
@@ -451,21 +410,14 @@ class MascotHeader extends StatelessWidget {
               top: 78,
               child: Text(
                 '조금씩 더 건강한 나를 위해',
-                style: TextStyle(
-                  color: mutedText,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: mutedText, fontSize: 14),
               ),
             ),
+            // Emoji fallback used when assets are not available
             Positioned(
-              right: 25,
-              bottom: -10,
-              child: Image.asset(
-                'assets/cat_mascot.png',
-                width: 170,
-                height: 160,
-                fit: BoxFit.contain,
-              ),
+              right: -30,
+              bottom: 10,
+              child: Image.asset('cat_mascot.png', width: 250, height: 250),
             ),
           ],
         ),
@@ -473,29 +425,21 @@ class MascotHeader extends StatelessWidget {
     );
   }
 
-  Widget _hill(double width, double height, Color color) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.elliptical(width, height),
-        ),
+  Widget _hill(double width, double height, Color color) => Container(
+    width: width,
+    height: height,
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.vertical(
+        top: Radius.elliptical(width, height),
       ),
-    );
-  }
+    ),
+  );
 
-  Widget _leaf(double size, double angle) {
-    return Transform.rotate(
-      angle: angle,
-      child: Icon(
-        Icons.eco_rounded,
-        size: size,
-        color: const Color(0xFFA8BE80),
-      ),
-    );
-  }
+  Widget _leaf(double size, double angle) => Transform.rotate(
+    angle: angle,
+    child: Icon(Icons.eco_rounded, size: size, color: const Color(0xFFA8BE80)),
+  );
 }
 
 class HeaderClipper extends CustomClipper<Path> {
@@ -517,3 +461,43 @@ class HeaderClipper extends CustomClipper<Path> {
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
+/* ============================================================
+   Shared SimplePage (Exercise / Ranking / Quit / Community)
+   ============================================================ */
+class SimplePage extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+
+  const SimplePage({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: mainGreen, size: 75),
+          const SizedBox(height: 20),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: darkGreen,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(subtitle, style: const TextStyle(fontSize: 16, color: grayText)),
+          const SizedBox(height: 20),
+          const Text('🌱🐱', style: TextStyle(fontSize: 55)),
+        ],
+      ),
+    );
+  }
+}
