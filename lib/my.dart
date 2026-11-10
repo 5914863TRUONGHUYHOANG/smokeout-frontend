@@ -138,7 +138,7 @@ class _MyScreenState extends State<MyScreen> {
                               Row(
                                 children: const [
                                   Text(
-                                    '사용자',
+                                    ' 사용자 ',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
