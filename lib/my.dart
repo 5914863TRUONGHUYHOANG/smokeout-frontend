@@ -1,10 +1,13 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+const Color green = Color(0xFF5E8B45);
+const Color lightGreen = Color(0xFFECF3E5);
+const Color background = Color(0xFFF3F6EB);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,8 +18,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Smoke Out',
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF2F5E8), // Background light greenish yellow
-        fontFamily: 'Pretendard', // Or system font
+        scaffoldBackgroundColor: background,
+        fontFamily: 'Pretendard',
+        colorScheme: ColorScheme.fromSeed(seedColor: green),
       ),
       home: const MyScreen(),
     );
@@ -31,28 +35,29 @@ class MyScreen extends StatefulWidget {
 }
 
 class _MyScreenState extends State<MyScreen> {
+  String nickname = '사용자';
+  String email = 'user@example.com';
+
   bool isExerciseNotificationOn = true;
-  bool isSmokeOutNotificationOn = true;
+  bool isSmokeNotificationOn = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // Background Leaves Pattern Effect (Simulated with Gradient/Decoration)
-          Positioned.fill(
-            child: Container(
-              color: const Color(0xFFF3F6EB),
-            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
           ),
-          
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              // Header
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Header Title Section
                   Row(
                     children: const [
                       Text(
@@ -60,365 +65,307 @@ class _MyScreenState extends State<MyScreen> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF5E8B45),
+                          color: green,
                         ),
                       ),
                       SizedBox(width: 4),
-                      Icon(Icons.eco, color: Color(0xFF5E8B45), size: 20),
+                      Icon(Icons.eco, color: green),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'MY',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w900,
-                      color: Color(0xFF5E8B45),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    '나의 금연 여정을 확인해 보세요!',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF757575),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
 
-                  // 1. Profile Card Section
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                  // Settings Button
+                  IconButton(
+                    icon: const Icon(
+                      Icons.settings_outlined,
+                      color: green,
+                      size: 26,
                     ),
-                    child: Row(
-                      children: [
-                        // Avatar with Camera Icon
-                        Stack(
-                          children: [
-                            const CircleAvatar(
-                              radius: 36,
-                              backgroundColor: Color(0xFFE5EDD8),
-                              child: Icon(Icons.person, size: 48, color: Color(0xFF7CA065)),
-                            ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(4),
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFF5E8B45),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.camera_alt,
-                                  color: Colors.white,
-                                  size: 14,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 16),
-                        
-                        // User Info
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: const [
-                                  Text(
-                                    ' 사용자 ',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4),
-                                  Icon(Icons.eco, color: Color(0xFF7CA065), size: 16),
-                                ],
-                              ),
-                              const SizedBox(height: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFECF3E5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Icon(Icons.eco, size: 14, color: Color(0xFF5E8B45)),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      '금연 도전 중',
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color(0xFF5E8B45),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Row(
-                                children: const [
-                                  Text(
-                                    '오늘도 건강한 하루 ',
-                                    style: TextStyle(fontSize: 12, color: Color(0xFF757575)),
-                                  ),
-                                  Icon(Icons.eco, size: 12, color: Color(0xFF7CA065)),
-                                ],
-                              ),
-                            ],
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => SettingsScreen(
+                            exerciseOn: isExerciseNotificationOn,
+                            smokeOn: isSmokeNotificationOn,
+                            onExerciseChanged: (value) {
+                              setState(() {
+                                isExerciseNotificationOn = value;
+                              });
+                            },
+                            onSmokeChanged: (value) {
+                              setState(() {
+                                isSmokeNotificationOn = value;
+                              });
+                            },
                           ),
                         ),
-                        const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.black45),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                  const SizedBox(height: 16),
+                ],
+              ),
 
-                  // 2. Exercise Record Section (운동 기록)
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
+              const SizedBox(height: 4),
+
+              const Text(
+                'MY',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  color: green,
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              const Text(
+                '나의 금연 여정을 확인해 보세요!',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // Profile Card
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: _cardDecoration(),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ProfileScreen(
+                          nickname: nickname,
+                          email: email,
+                          onSave: (newNickname, newEmail) {
+                            setState(() {
+                              nickname = newNickname;
+                              email = newEmail;
+                            });
+                          },
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 34,
+                        backgroundColor: Color(0xFFE5EDD8),
+                        child: Icon(
+                          Icons.person,
+                          size: 46,
+                          color: Color(0xFF7CA065),
+                        ),
+                      ),
+
+                      const SizedBox(width: 16),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: const [
-                                Icon(Icons.directions_run, color: Color(0xFF5E8B45), size: 26),
-                                SizedBox(width: 8),
+                              children: [
                                 Text(
-                                  '나의 운동 기록',
-                                  style: TextStyle(
+                                  nickname,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
                                   ),
+                                ),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.eco,
+                                  color: green,
+                                  size: 16,
                                 ),
                               ],
                             ),
+
+                            const SizedBox(height: 6),
+
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
-                                color: const Color(0xFFECF3E5),
-                                borderRadius: BorderRadius.circular(12),
+                                color: lightGreen,
+                                borderRadius:
+                                    BorderRadius.circular(12),
                               ),
-                              child: Row(
-                                children: const [
-                                  Text(
-                                    '전체 보기',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color(0xFF5E8B45),
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Icon(Icons.arrow_forward_ios, size: 10, color: Color(0xFF5E8B45)),
-                                ],
+                              child: const Text(
+                                '🌿 금연 도전 중',
+                                style: TextStyle(
+                                  color: green,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        
-                        // 3 Stat Indicators
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            // Steps
-                            _buildStatItem(
-                              icon: Icons.directions_walk,
-                              value: '8,431 걸음',
-                              label: '오늘의 걸음 수',
-                            ),
-                            _buildDivider(),
-                            // Calories
-                            _buildStatItem(
-                              icon: Icons.local_fire_department,
-                              value: '125.3 kcal',
-                              label: '소모 칼로리',
-                            ),
-                            _buildDivider(),
-                            // Time
-                            _buildStatItem(
-                              icon: Icons.fitness_center,
-                              value: '30 분',
-                              label: '운동 시간',
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
 
-                  // 3. Notification Settings Section (알림 설정)
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: const [
-                            Icon(Icons.notifications, color: Color(0xFF5E8B45), size: 24),
-                            SizedBox(width: 8),
-                            Text(
-                              '알림 설정',
+                            const SizedBox(height: 6),
+
+                            const Text(
+                              '오늘도 건강한 하루 🌿',
                               style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
+                                fontSize: 12,
+                                color: Colors.grey,
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 12),
-                        const Divider(height: 1, color: Color(0xFFEEEEEE)),
-                        const SizedBox(height: 12),
+                      ),
 
-                        // Exercise Switch
-                        Row(
-                          children: [
-                            const Icon(Icons.directions_run, color: Color(0xFF5E8B45), size: 24),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    '운동 알림',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    '운동 시작을 알려드려요!',
-                                    style: TextStyle(fontSize: 12, color: Color(0xFF757575)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Switch(
-                              value: isExerciseNotificationOn,
-                              activeColor: Colors.white,
-                              activeTrackColor: const Color(0xFF5E8B45),
-                              onChanged: (val) {
-                                setState(() {
-                                  isExerciseNotificationOn = val;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        const Divider(height: 1, color: Color(0xFFEEEEEE)),
-                        const SizedBox(height: 12),
-
-                        // Smoke Out Switch
-                        Row(
-                          children: [
-                            const Icon(Icons.smoke_free, color: Color(0xFF5E8B45), size: 24),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    '금연 알림',
-                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                  ),
-                                  Text(
-                                    '금연을 응원하는 알림을 받아보세요!',
-                                    style: TextStyle(fontSize: 12, color: Color(0xFF757575)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Switch(
-                              value: isSmokeOutNotificationOn,
-                              activeColor: Colors.white,
-                              activeTrackColor: const Color(0xFF5E8B45),
-                              onChanged: (val) {
-                                setState(() {
-                                  isSmokeOutNotificationOn = val;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 18,
+                        color: Colors.black45,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 24),
+                ),
+              ),
 
-                  // Encouragement Text
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          '지금도 충분히 잘하고 있어요! ',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF7CA065),
+              const SizedBox(height: 16),
+
+              // My Smoking Record
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEF2E7),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '나의 금연 기록',
+                      style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+
+                    const SizedBox(height: 22),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _smokingStat(
+                            '25일',
+                            '금연 유지 일수',
                           ),
                         ),
-                        Icon(Icons.favorite, color: Color(0xFF7CA065), size: 16),
+                        Expanded(
+                          child: _smokingStat(
+                            '50,000원',
+                            '절약한 금액',
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
+                  ],
+                ),
               ),
-            ),
+
+              const SizedBox(height: 16),
+
+              // My Activity
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: _cardDecoration(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '나의 활동',
+                      style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+
+                    const SizedBox(height: 18),
+
+                    _activityItem(
+                      Icons.directions_walk,
+                      '총 운동 횟수',
+                      '18회',
+                    ),
+
+                    const Divider(
+                      height: 30,
+                      color: Color(0xFFEEEEEE),
+                    ),
+
+                    _activityItem(
+                      Icons.access_time,
+                      '누적 운동 시간',
+                      '360분',
+                    ),
+
+                    const Divider(
+                      height: 30,
+                      color: Color(0xFFEEEEEE),
+                    ),
+
+                    _activityItem(
+                      Icons.emoji_events_outlined,
+                      '나의 랭킹',
+                      '3위',
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Encouragement
+              const Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '지금도 충분히 잘하고 있어요! ',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF7CA065),
+                      ),
+                    ),
+                    Icon(
+                      Icons.favorite,
+                      color: Color(0xFF7CA065),
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+            ],
           ),
-        ],
+        ),
       ),
 
-      // Bottom Navigation Bar
+      // Bottom Navigation
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3, // MY selected
+        currentIndex: 3,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: const Color(0xFF5E8B45),
+        selectedItemColor: green,
         unselectedItemColor: Colors.grey,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        selectedLabelStyle: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -441,42 +388,476 @@ class _MyScreenState extends State<MyScreen> {
     );
   }
 
-  // Stat item widget helper
-  Widget _buildStatItem({
-    required IconData icon,
-    required String value,
-    required String label,
-  }) {
+  // Card Decoration
+  BoxDecoration _cardDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(24),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.03),
+          blurRadius: 10,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    );
+  }
+
+  // Smoking Statistics
+  Widget _smokingStat(String value, String label) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: const Color(0xFF5E8B45), size: 28),
-        const SizedBox(height: 8),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 29,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Color(0xFF4F805C),
           ),
         ),
-        const SizedBox(height: 2),
+        const SizedBox(height: 12),
         Text(
           label,
           style: const TextStyle(
-            fontSize: 11,
-            color: Color(0xFF757575),
+            fontSize: 14,
+            color: Colors.black54,
           ),
         ),
       ],
     );
   }
 
-  // Divider between stats helper
-  Widget _buildDivider() {
-    return Container(
-      height: 35,
-      width: 1,
-      color: const Color(0xFFEEEEEE),
+  // Activity Item
+  Widget _activityItem(
+    IconData icon,
+    String title,
+    String value,
+  ) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 30,
+          color: const Color(0xFF5D8464),
+        ),
+
+        const SizedBox(width: 16),
+
+        Expanded(
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
+            ),
+          ),
+        ),
+
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+// ==========================================
+// PROFILE SCREEN
+// ==========================================
+
+class ProfileScreen extends StatefulWidget {
+  final String nickname;
+  final String email;
+  final Function(String, String) onSave;
+
+  const ProfileScreen({
+    super.key,
+    required this.nickname,
+    required this.email,
+    required this.onSave,
+  });
+
+  @override
+  State<ProfileScreen> createState() =>
+      _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late TextEditingController nicknameController;
+  late TextEditingController emailController;
+
+  bool isEditing = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    nicknameController =
+        TextEditingController(text: widget.nickname);
+
+    emailController =
+        TextEditingController(text: widget.email);
+  }
+
+  @override
+  void dispose() {
+    nicknameController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
+  void saveProfile() {
+    if (nicknameController.text.trim().isEmpty ||
+        emailController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('닉네임과 이메일을 입력해 주세요.'),
+        ),
+      );
+      return;
+    }
+
+    widget.onSave(
+      nicknameController.text.trim(),
+      emailController.text.trim(),
+    );
+
+    setState(() {
+      isEditing = false;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('프로필이 수정되었습니다!'),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        title: const Text(
+          '프로필 관리',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        leading: const BackButton(color: Colors.black87),
+      ),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            const SizedBox(height: 25),
+
+            // Profile Image
+            Stack(
+              children: [
+                const CircleAvatar(
+                  radius: 55,
+                  backgroundColor: Color(0xFFE5EDD8),
+                  child: Icon(
+                    Icons.person,
+                    size: 75,
+                    color: Color(0xFF7CA065),
+                  ),
+                ),
+
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            '사진 선택 기능은 이미지 업로드 연동이 필요합니다.',
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(9),
+                      decoration: const BoxDecoration(
+                        color: green,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 35),
+
+            // Nickname
+            _profileField(
+              '닉네임 (Nickname)',
+              nicknameController,
+              Icons.person_outline,
+            ),
+
+            const SizedBox(height: 22),
+
+            // Email
+            _profileField(
+              '이메일 (Email)',
+              emailController,
+              Icons.email_outlined,
+            ),
+
+            const SizedBox(height: 35),
+
+            // Edit / Save Button
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: green,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+
+                onPressed: () {
+                  if (isEditing) {
+                    saveProfile();
+                  } else {
+                    setState(() {
+                      isEditing = true;
+                    });
+                  }
+                },
+
+                child: Text(
+                  isEditing ? '저장하기' : '프로필 수정',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            if (isEditing) ...[
+              const SizedBox(height: 12),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    nicknameController.text = widget.nickname;
+                    emailController.text = widget.email;
+                    isEditing = false;
+                  });
+                },
+                child: const Text(
+                  '취소',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _profileField(
+    String title,
+    TextEditingController controller,
+    IconData icon,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        TextField(
+          controller: controller,
+          readOnly: !isEditing,
+          decoration: InputDecoration(
+            prefixIcon: Icon(icon, color: green),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+              borderSide: BorderSide.none,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+// ==========================================
+// SETTINGS SCREEN
+// ==========================================
+
+class SettingsScreen extends StatefulWidget {
+  final bool exerciseOn;
+  final bool smokeOn;
+  final ValueChanged<bool> onExerciseChanged;
+  final ValueChanged<bool> onSmokeChanged;
+
+  const SettingsScreen({
+    super.key,
+    required this.exerciseOn,
+    required this.smokeOn,
+    required this.onExerciseChanged,
+    required this.onSmokeChanged,
+  });
+
+  @override
+  State<SettingsScreen> createState() =>
+      _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  late bool exerciseNotification;
+  late bool smokeNotification;
+
+  @override
+  void initState() {
+    super.initState();
+    exerciseNotification = widget.exerciseOn;
+    smokeNotification = widget.smokeOn;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: background,
+        elevation: 0,
+        title: const Text(
+          '설정',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: const BackButton(color: Colors.black87),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.notifications,
+                        color: green,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        '알림 설정',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    activeTrackColor: green,
+                    title: const Text(
+                      '운동 알림',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      '운동 시작을 알려드려요!',
+                    ),
+                    secondary: const Icon(
+                      Icons.directions_run,
+                      color: green,
+                    ),
+                    value: exerciseNotification,
+                    onChanged: (value) {
+                      setState(() {
+                        exerciseNotification = value;
+                      });
+                      widget.onExerciseChanged(value);
+                    },
+                  ),
+
+                  const Divider(),
+
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    activeTrackColor: green,
+                    title: const Text(
+                      '금연 알림',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: const Text(
+                      '금연을 응원하는 알림을 받아보세요!',
+                    ),
+                    secondary: const Icon(
+                      Icons.smoke_free,
+                      color: green,
+                    ),
+                    value: smokeNotification,
+                    onChanged: (value) {
+                      setState(() {
+                        smokeNotification = value;
+                      });
+                      widget.onSmokeChanged(value);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
