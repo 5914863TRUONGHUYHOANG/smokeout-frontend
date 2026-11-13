@@ -12,77 +12,40 @@ const Color litGreen = Color(0xFFEEF2DE);
 const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
 const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
-// 운동 내용과 상세 화면으로 넘어가는 기능은 변경하지 않았습니다.
-const recommendedExercises = <ExerciseData>[
-  ExerciseData(
-    title: '박스 호흡',
-    duration: '3분',
-    difficulty: '낮음',
-    category: '호흡',
-    description: '같은 길이로 들이쉬고 멈추고 내쉬며 흥분 상태를 진정시킵니다.',
-    steps: ['4초 들이마시기', '4초 멈추기', '4초 내쉬기', '4초 멈추기'],
-    repeat: '총 6회 반복',
-  ),
-  ExerciseData(
-    title: '목·어깨 스트레칭',
-    duration: '5분',
-    difficulty: '낮음',
-    category: '스트레칭',
-    description: '목과 어깨의 긴장을 풀고 몸을 편안하게 만들어줍니다.',
-    steps: [
-      '고개를 오른쪽으로 천천히 기울이기',
-      '15초 유지 후 반대쪽도 반복하기',
-      '어깨를 천천히 앞뒤로 돌리기',
-      '무리하지 않고 동작 반복하기',
-    ],
-    repeat: '약 5분 진행',
-  ),
-  ExerciseData(
-    title: '가벼운 걷기 10분',
-    duration: '10분',
-    difficulty: '낮음',
-    category: '걷기',
-    description: '가볍게 걸으며 흡연 욕구에서 주의를 돌리고 기분을 전환합니다.',
-    steps: [
-      '편안한 자세로 걷기 시작하기',
-      '자연스럽게 호흡하기',
-      '주변 풍경과 발걸음에 집중하기',
-      '일정한 속도로 걷기 유지하기',
-    ],
-    repeat: '총 10분 진행',
-  ),
-  ExerciseData(
-    title: '벽 밀기·플랭크 코어',
-    duration: '6분',
-    difficulty: '보통',
-    category: '근력',
-    description: '벽을 이용한 근력 운동으로 몸을 움직이며 긴장을 해소합니다.',
-    steps: [
-      '벽 앞에 서서 양손을 벽에 대기',
-      '팔꿈치를 천천히 굽혔다 펴기',
-      '벽을 짚고 플랭크 자세 유지하기',
-      '휴식하며 동작 반복하기',
-    ],
-    repeat: '약 6분 진행',
-  ),
-  ExerciseData(
-    title: '욕구 서핑 명상',
-    duration: '5분',
-    difficulty: '낮음',
-    category: '명상',
-    description: '흡연 욕구를 억지로 없애려 하지 않고 자연스럽게 지나가도록 관찰합니다.',
-    steps: [
-      '편안한 자세로 앉기',
-      '현재 느껴지는 흡연 욕구 알아차리기',
-      '호흡과 몸의 감각에 집중하기',
-      '욕구의 변화를 차분히 관찰하기',
-    ],
-    repeat: '총 5분 진행',
-  ),
-];
+class ExerciseRecommendDialog extends StatefulWidget {
+  final double cravingLevel;
+  final int selectedDuration;
+  // exercise.dart에서 API 호출 함수를 전달받습니다.
+  final Future<List<ExerciseData>> Function() loadRecommendations;
 
-class ExerciseRecommendDialog extends StatelessWidget {
-  const ExerciseRecommendDialog({super.key});
+  const ExerciseRecommendDialog({
+    super.key,
+    required this.cravingLevel,
+    required this.selectedDuration,
+    required this.loadRecommendations,
+  });
+
+  @override
+  State<ExerciseRecommendDialog> createState() =>
+      _ExerciseRecommendDialogState();
+}
+
+class _ExerciseRecommendDialogState extends State<ExerciseRecommendDialog> {
+  late Future<List<ExerciseData>> _recommendations;
+
+  @override
+  void initState() {
+    super.initState();
+    _requestRecommendations();
+  }
+
+  void _requestRecommendations() {
+    _recommendations = widget.loadRecommendations();
+  }
+
+  void _retry() {
+    setState(_requestRecommendations);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +75,11 @@ class ExerciseRecommendDialog extends StatelessWidget {
                   color: lightGreen,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.spa_outlined, color: darkGreen, size: 29),
+                child: const Icon(
+                  Icons.spa_outlined,
+                  color: darkGreen,
+                  size: 29,
+                ),
               ),
               const SizedBox(height: 12),
               const Text(
@@ -127,22 +94,66 @@ class ExerciseRecommendDialog extends StatelessWidget {
               ),
               const SizedBox(height: 7),
               const Text(
-                '현재 욕구와 조건에 맞는 운동 5가지를 추천해드려요.',
+                '서버에서 선택한 맞춤 운동을 보여드려요.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 13, color: textGray, height: 1.45),
               ),
+              const SizedBox(height: 11),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 6,
+                children: [
+                  _conditionTag('욕구 강도 ${widget.cravingLevel.toInt()}/10'),
+                  _conditionTag(widget.selectedDuration == 0
+                      ? '시간 전체'
+                      : '${widget.selectedDuration}분 이내'),
+                ],
+              ),
               const SizedBox(height: 17),
-
-              const SizedBox(height: 10),
-              // 모바일 화면에서는 카드 목록만 스크롤됩니다.
+              // DB에 등록된 운동 중 서버가 추천한 목록만 사용합니다.
+              // 요청 중/오류/결과 없음의 상태를 각각 구분합니다.
               Flexible(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.only(bottom: 2),
-                  itemCount: recommendedExercises.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 9),
-                  itemBuilder: (context, index) {
-                    return exerciseItem(context, recommendedExercises[index]);
+                child: FutureBuilder<List<ExerciseData>>(
+                  future: _recommendations,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(color: green),
+                            SizedBox(height: 14),
+                            Text('맞춤 운동을 불러오는 중...',
+                                style: TextStyle(color: textGray)),
+                          ],
+                        ),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return _messageView(
+                        icon: Icons.wifi_off_rounded,
+                        message: snapshot.error.toString(),
+                        showRetry: true,
+                      );
+                    }
+                    final exercises = snapshot.data ?? const <ExerciseData>[];
+                    if (exercises.isEmpty) {
+                      return _messageView(
+                        icon: Icons.search_off_rounded,
+                        message: '현재 조건에 맞는 추천 운동이 없습니다.\n'
+                            '시간을 늘려 다시 시도해 주세요.',
+                        showRetry: true,
+                      );
+                    }
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.only(bottom: 2),
+                      itemCount: exercises.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 9),
+                      itemBuilder: (context, index) =>
+                          exerciseItem(context, exercises[index]),
+                    );
                   },
                 ),
               ),
@@ -173,6 +184,53 @@ class ExerciseRecommendDialog extends StatelessWidget {
     );
   }
 
+  Widget _conditionTag(String label) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
+      decoration: BoxDecoration(
+        color: litGreen,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: borderGreen),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: darkGreen,
+        ),
+      ),
+    );
+  }
+
+  Widget _messageView({
+    required IconData icon,
+    required String message,
+    required bool showRetry,
+  }) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 40, color: textGray),
+            const SizedBox(height: 12),
+            Text(message, textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13, color: textGray)),
+            if (showRetry) ...[
+              const SizedBox(height: 14),
+              OutlinedButton.icon(
+                onPressed: _retry,
+                icon: const Icon(Icons.refresh),
+                label: const Text('다시 시도'),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
   IconData _iconFor(String category) {
     switch (category) {
       case '호흡':
@@ -185,12 +243,16 @@ class ExerciseRecommendDialog extends StatelessWidget {
         return Icons.fitness_center_rounded;
       case '명상':
         return Icons.self_improvement_rounded;
+      case '요가':
+        return Icons.self_improvement_rounded;
+      case '유산소':
+        return Icons.favorite_outline_rounded;
       default:
         return Icons.spa_rounded;
     }
   }
 
-  // 디자인만 변경: 항목을 누르면 예전과 동일하게 운동 상세 Dialog로 이동합니다.
+  // 서버 추천 항목을 누르면 기존 운동 상세 Dialog를 엽니다.
   Widget exerciseItem(BuildContext context, ExerciseData exercise) {
     return Material(
       color: card,
@@ -200,7 +262,8 @@ class ExerciseRecommendDialog extends StatelessWidget {
         onTap: () {
           showDialog<void>(
             context: context,
-            builder: (dialogContext) => ExerciseDetailScreen(exercise: exercise),
+            builder: (dialogContext) =>
+                ExerciseDetailScreen(exercise: exercise),
           );
         },
         child: Container(
@@ -218,7 +281,11 @@ class ExerciseRecommendDialog extends StatelessWidget {
                   color: litGreen,
                   borderRadius: BorderRadius.circular(13),
                 ),
-                child: Icon(_iconFor(exercise.category), color: green, size: 26),
+                child: Icon(
+                  _iconFor(exercise.category),
+                  color: green,
+                  size: 26,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -240,6 +307,15 @@ class ExerciseRecommendDialog extends StatelessWidget {
                       '${exercise.duration}  ·  ${exercise.difficulty}  ·  ${exercise.category}',
                       style: const TextStyle(color: textGray, fontSize: 12),
                     ),
+                    if (exercise.reason?.isNotEmpty ?? false) ...[
+                      const SizedBox(height: 5),
+                      Text(
+                        exercise.reason!,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(color: textGray, fontSize: 11),
+                      ),
+                    ],
                   ],
                 ),
               ),

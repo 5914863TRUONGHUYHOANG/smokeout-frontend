@@ -6,7 +6,6 @@ import 'exercise.dart' show ExerciseScreen;
 import 'my.dart' show MyScreen;
 import 'ranking.dart' show RankingScreen;
 
-
 // 앱의 진입점은 main.dart 한 곳에서 관리합니다.
 void main() {
   runApp(const MyApp());
@@ -29,9 +28,7 @@ class MyApp extends StatelessWidget {
       // 기존 로그인 화면은 그대로 유지합니다.
       home: const LoginScreen(),
       // login.dart의 로그인 완료 코드는 '/home'으로 이동합니다.
-      routes: {
-        '/home': (context) => const MainScreen(),
-      },
+      routes: {'/home': (context) => const MainScreen()},
     );
   }
 }
@@ -52,7 +49,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     pages = [
-      HomeScreen(onGoToExercise: () => selectTab(1), onGoToRanking: () => selectTab(2)),
+      HomeScreen(
+        onGoToExercise: () => selectTab(1),
+        onGoToRanking: () => selectTab(2),
+      ),
       const ExerciseScreen(),
       const RankingScreen(),
       const MyScreen(),
@@ -68,10 +68,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HomeScreen.cream,
-      body: IndexedStack(
-        index: selectedIndex,
-        children: pages,
-      ),
+      body: IndexedStack(index: selectedIndex, children: pages),
       bottomNavigationBar: BottomAppBar(
         height: 70,
         padding: EdgeInsets.zero,
@@ -163,8 +160,9 @@ class _TabItemState extends State<_TabItem> {
                     style: TextStyle(
                       fontSize: 12,
                       color: widget.selected ? darkGreen : Colors.grey,
-                      fontWeight:
-                          widget.selected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: widget.selected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
                 ],
@@ -176,4 +174,3 @@ class _TabItemState extends State<_TabItem> {
     );
   }
 }
-

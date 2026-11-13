@@ -8,9 +8,7 @@ class HomeStatusScreen extends StatelessWidget {
     return AlertDialog(
       backgroundColor: const Color(0xFFFDFDF6),
 
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
 
       title: const Text(
         '금연 현황 상세보기',

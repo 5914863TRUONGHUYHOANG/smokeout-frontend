@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 // exercise_dialog.dart의 추천 운동 목록에서도 이 모델을 사용합니다.
 class ExerciseData {
+  // 서버에서 받은 식별자. 프론트에서 임의의 운동을 생성하지 않습니다.
+  final int exerciseId;
+  final int? recommendationId;
+  final String? reason;
   final String title;
   final String duration;
   final String difficulty;
@@ -11,6 +15,9 @@ class ExerciseData {
   final String repeat;
 
   const ExerciseData({
+    required this.exerciseId,
+    this.recommendationId,
+    this.reason,
     required this.title,
     required this.duration,
     required this.difficulty,
@@ -48,6 +55,10 @@ class ExerciseDetailScreen extends StatelessWidget {
       case '근력':
         return Icons.fitness_center_rounded;
       case '명상':
+        return Icons.self_improvement_rounded;
+      case '유산소':
+        return Icons.favorite_outline_rounded;
+      case '요가':
         return Icons.self_improvement_rounded;
       default:
         return Icons.spa_outlined;
@@ -114,7 +125,9 @@ class ExerciseDetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       decoration: _cardDecoration(),
                       child: Text(
-                        exercise.description,
+                        exercise.description.isEmpty
+                            ? 'DB에 운동 설명이 등록되지 않았습니다.'
+                            : exercise.description,
                         style: const TextStyle(
                           fontSize: 14,
                           height: 1.55,
@@ -122,6 +135,24 @@ class ExerciseDetailScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    if (exercise.reason != null && exercise.reason!.trim().isNotEmpty) ...[
+                      const SizedBox(height: 18),
+                      _sectionTitle(Icons.auto_awesome_outlined, '추천 이유'),
+                      const SizedBox(height: 9),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: _cardDecoration(),
+                        child: Text(
+                          exercise.reason!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            height: 1.55,
+                            color: Color(0xFF394335),
+                          ),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 18),
                     _sectionTitle(Icons.format_list_numbered_rounded, '진행 방법'),
                     const SizedBox(height: 9),
@@ -132,6 +163,11 @@ class ExerciseDetailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if (exercise.steps.isEmpty)
+                            const Text(
+                              'DB에 등록된 진행 방법이 없습니다.',
+                              style: TextStyle(color: _secondaryText),
+                            ),
                           for (int i = 0; i < exercise.steps.length; i++) ...[
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,26 +208,28 @@ class ExerciseDetailScreen extends StatelessWidget {
                             if (i != exercise.steps.length - 1)
                               const SizedBox(height: 13),
                           ],
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Divider(color: _borderGreen, height: 1),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(Icons.timer_outlined, color: _green, size: 20),
-                              const SizedBox(width: 7),
-                              Expanded(
-                                child: Text(
-                                  exercise.repeat,
-                                  style: const TextStyle(
-                                    color: _darkGreen,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w800,
+                          if (exercise.repeat.trim().isNotEmpty) ...[
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              child: Divider(color: _borderGreen, height: 1),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(Icons.timer_outlined, color: _green, size: 20),
+                                const SizedBox(width: 7),
+                                Expanded(
+                                  child: Text(
+                                    exercise.repeat,
+                                    style: const TextStyle(
+                                      color: _darkGreen,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                     ),
