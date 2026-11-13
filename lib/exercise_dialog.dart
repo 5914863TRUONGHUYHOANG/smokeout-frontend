@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'exercise_detail.dart';
 
-// 테마 색상
+// 기존 앱의 크림색·초록색 테마와 일치하도록 유지했습니다.
 const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
 const Color card = Color.fromRGBO(253, 253, 246, 1.0);
 const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
@@ -12,7 +12,7 @@ const Color litGreen = Color(0xFFEEF2DE);
 const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
 const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
-// 추천 운동 5가지
+// 운동 내용과 상세 화면으로 넘어가는 기능은 변경하지 않았습니다.
 const recommendedExercises = <ExerciseData>[
   ExerciseData(
     title: '박스 호흡',
@@ -87,67 +87,82 @@ class ExerciseRecommendDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       backgroundColor: cream,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: borderGreen),
+      ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: 410,
-          maxHeight: MediaQuery.sizeOf(context).height * 0.85,
+          maxWidth: 440,
+          maxHeight: MediaQuery.sizeOf(context).height * 0.86,
         ),
         child: Padding(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.fromLTRB(18, 22, 18, 18),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // 헤더: 기존 추천 제목은 유지하고 더 명확한 정보 구조로 정리.
+              Container(
+                width: 35,
+                height: 35,
+                decoration: const BoxDecoration(
+                  color: lightGreen,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.spa_outlined, color: darkGreen, size: 29),
+              ),
+              const SizedBox(height: 12),
               const Text(
                 'AI 맞춤 운동 추천',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 23,
+                  fontWeight: FontWeight.w800,
                   color: darkGreen,
+                  letterSpacing: -0.5,
                 ),
               ),
-
-              const SizedBox(height: 8),
-
+              const SizedBox(height: 7),
               const Text(
                 '현재 욕구와 조건에 맞는 운동 5가지를 추천해드려요.',
-                style: TextStyle(fontSize: 13, color: darkGreen),
                 textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, color: textGray, height: 1.45),
               ),
+              const SizedBox(height: 17),
 
-              const SizedBox(height: 20),
-
-              // 운동 목록
+              const SizedBox(height: 10),
+              // 모바일 화면에서는 카드 목록만 스크롤됩니다.
               Flexible(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (final exercise in recommendedExercises)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: exerciseItem(context, exercise),
-                        ),
-                    ],
-                  ),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(bottom: 2),
+                  itemCount: recommendedExercises.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 9),
+                  itemBuilder: (context, index) {
+                    return exerciseItem(context, recommendedExercises[index]);
+                  },
                 ),
               ),
-
-              const SizedBox(height: 12),
-
+              const SizedBox(height: 16),
               SizedBox(
                 width: double.infinity,
-                height: 42,
+                height: 45,
                 child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: darkGreen,
+                    backgroundColor: card,
+                    side: const BorderSide(color: borderGreen, width: 1.4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
                   child: const Text(
                     '닫기',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
                   ),
                 ),
               ),
@@ -158,60 +173,80 @@ class ExerciseRecommendDialog extends StatelessWidget {
     );
   }
 
-  // 운동 항목
+  IconData _iconFor(String category) {
+    switch (category) {
+      case '호흡':
+        return Icons.air;
+      case '스트레칭':
+        return Icons.accessibility_new_rounded;
+      case '걷기':
+        return Icons.directions_walk_rounded;
+      case '근력':
+        return Icons.fitness_center_rounded;
+      case '명상':
+        return Icons.self_improvement_rounded;
+      default:
+        return Icons.spa_rounded;
+    }
+  }
+
+  // 디자인만 변경: 항목을 누르면 예전과 동일하게 운동 상세 Dialog로 이동합니다.
   Widget exerciseItem(BuildContext context, ExerciseData exercise) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(12),
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ExerciseDetailScreen(exercise: exercise),
+    return Material(
+      color: card,
+      borderRadius: BorderRadius.circular(16),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: () {
+          showDialog<void>(
+            context: context,
+            builder: (dialogContext) => ExerciseDetailScreen(exercise: exercise),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 13),
+          decoration: BoxDecoration(
+            border: Border.all(color: borderGreen, width: 1.3),
+            borderRadius: BorderRadius.circular(16),
           ),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          border: Border.all(color: borderGreen, width: 1.5),
-          borderRadius: BorderRadius.circular(12),
-          color: litGreen,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 45,
-              height: 45,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(8),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: litGreen,
+                  borderRadius: BorderRadius.circular(13),
+                ),
+                child: Icon(_iconFor(exercise.category), color: green, size: 26),
               ),
-            ),
-
-            const SizedBox(width: 12),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    exercise.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: green,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      exercise.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: darkGreen,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${exercise.duration} · ${exercise.difficulty} · ${exercise.category}',
-                    style: const TextStyle(fontSize: 13),
-                  ),
-                ],
+                    const SizedBox(height: 5),
+                    Text(
+                      '${exercise.duration}  ·  ${exercise.difficulty}  ·  ${exercise.category}',
+                      style: const TextStyle(color: textGray, fontSize: 12),
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            const Icon(Icons.chevron_right, color: green),
-          ],
+              const SizedBox(width: 6),
+              const Icon(Icons.chevron_right_rounded, color: green, size: 24),
+            ],
+          ),
         ),
       ),
     );

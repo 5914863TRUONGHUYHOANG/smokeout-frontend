@@ -1,3 +1,5 @@
+import 'home_smoke_sataus.dart';
+
 import 'package:flutter/material.dart';
 
 // 기존 홈 화면
@@ -131,8 +133,19 @@ class HomeScreen extends StatelessWidget {
                           color: lightGreen,
                           borderRadius: BorderRadius.circular(20),
                         ),
-
+                        child: GestureDetector(
+                          onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const HomeStatusScreen();
+                            },
+                          );
+                        },
                         child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               '상세보기',
@@ -146,6 +159,8 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+                        ),
+                        
                       ),
                     ],
                   ),
@@ -154,13 +169,12 @@ class HomeScreen extends StatelessWidget {
 
                   // 금연 현황 3개
                   SizedBox(
-                    height: 65,
+                    height: 70,
                     child: Row(
                       children: [
                         // 금연한 일
                         Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
                             children: [
                               const SizedBox(width: 10),
 
@@ -169,37 +183,18 @@ class HomeScreen extends StatelessWidget {
                                 color: darkGreen,
                                 size: 22,
                               ),
+                              Text(
+                                '금연한 일',
+                                style: TextStyle(fontSize: 12, color: textGray),
+                              ),
 
-                              const SizedBox(width: 5),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    '금연한 일',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: textGray,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    '15일',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: darkGreen,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    '(2025.09.13)',
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      color: textGray,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                '15일',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: darkGreen,
+                                ),
                               ),
                             ],
                           ),
@@ -210,8 +205,7 @@ class HomeScreen extends StatelessWidget {
 
                         // 참은 담배
                         Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
                             children: [
                               const SizedBox(width: 10),
 
@@ -221,36 +215,18 @@ class HomeScreen extends StatelessWidget {
                                 height: 24,
                               ),
 
-                              const SizedBox(width: 5),
+                              Text(
+                                '참은 담배',
+                                style: TextStyle(fontSize: 12, color: textGray),
+                              ),
 
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    '참은 담배',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: textGray,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    '300개비',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: darkGreen,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    '(2025.09.13)',
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      color: textGray,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                '300개비',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: darkGreen,
+                                ),
                               ),
                             ],
                           ),
@@ -261,8 +237,7 @@ class HomeScreen extends StatelessWidget {
 
                         // 아낀 금액
                         Expanded(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Column(
                             children: [
                               const SizedBox(width: 10),
 
@@ -271,37 +246,18 @@ class HomeScreen extends StatelessWidget {
                                 color: darkGreen,
                                 size: 22,
                               ),
+                              Text(
+                                '아낀 금액',
+                                style: TextStyle(fontSize: 12, color: textGray),
+                              ),
 
-                              const SizedBox(width: 5),
-
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
-                                    '아낀 금액',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: textGray,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    '120,000원',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: darkGreen,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    '(1갑 4000원 기준)',
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      color: textGray,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                '120,000원',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: darkGreen,
+                                ),
                               ),
                             ],
                           ),
@@ -677,7 +633,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-
     );
   }
 }
