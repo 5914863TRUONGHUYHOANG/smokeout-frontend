@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 // 기존 홈 화면
 class HomeScreen extends StatelessWidget {
   final VoidCallback onGoToExercise;
+  final VoidCallback onGoToRanking;
 
-  const HomeScreen({super.key, required this.onGoToExercise});
-
+  const HomeScreen({
+    super.key,
+    required this.onGoToExercise,
+    required this.onGoToRanking,
+  });
   static const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
   static const Color card = Color.fromRGBO(253, 253, 246, 1.0);
   static const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
@@ -135,32 +139,34 @@ class HomeScreen extends StatelessWidget {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const HomeStatusScreen();
-                            },
-                          );
-                        },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '상세보기',
-                              style: TextStyle(fontSize: 12, color: darkGreen),
-                            ),
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const HomeStatusScreen();
+                              },
+                            );
+                          },
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '상세보기',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: darkGreen,
+                                ),
+                              ),
 
-                            Icon(
-                              Icons.chevron_right,
-                              size: 17,
-                              color: darkGreen,
-                            ),
-                          ],
+                              Icon(
+                                Icons.chevron_right,
+                                size: 17,
+                                color: darkGreen,
+                              ),
+                            ],
+                          ),
                         ),
-                        ),
-                        
                       ),
                     ],
                   ),
@@ -276,64 +282,70 @@ class HomeScreen extends StatelessWidget {
               children: [
                 // 랭킹
                 Expanded(
-                  child: Container(
-                    height: 110,
-                    margin: const EdgeInsets.fromLTRB(6, 3, 3, 5),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: GestureDetector(
+                    onTap: onGoToRanking,
+                    child: Container(
+                      height: 110,
+                      margin: const EdgeInsets.fromLTRB(6, 3, 3, 5),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
 
-                    decoration: BoxDecoration(
-                      color: litGreen,
-                      borderRadius: BorderRadius.circular(17),
-                      border: Border.all(color: borderGreen, width: 1.5),
-                    ),
+                      decoration: BoxDecoration(
+                        color: litGreen,
+                        borderRadius: BorderRadius.circular(17),
+                        border: Border.all(color: borderGreen, width: 1.5),
+                      ),
 
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.emoji_events,
-                          size: 43,
-                          color: darkGreen,
-                        ),
-
-                        const SizedBox(width: 8),
-
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                '랭킹',
-                                style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.bold,
-                                  color: darkGreen,
-                                ),
-                              ),
-
-                              Text(
-                                '현재 나의 순위',
-                                style: TextStyle(fontSize: 11, color: textGray),
-                              ),
-
-                              Text(
-                                '1위',
-                                style: TextStyle(
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                  color: darkGreen,
-                                ),
-                              ),
-                            ],
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.emoji_events,
+                            size: 43,
+                            color: darkGreen,
                           ),
-                        ),
 
-                        const Icon(
-                          Icons.chevron_right,
-                          size: 28,
-                          color: darkGreen,
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  '랭킹',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                    color: darkGreen,
+                                  ),
+                                ),
+
+                                Text(
+                                  '현재 나의 순위',
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: textGray,
+                                  ),
+                                ),
+
+                                Text(
+                                  '1위',
+                                  style: TextStyle(
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold,
+                                    color: darkGreen,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const Icon(
+                            Icons.chevron_right,
+                            size: 28,
+                            color: darkGreen,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

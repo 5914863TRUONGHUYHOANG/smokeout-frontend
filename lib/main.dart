@@ -52,9 +52,9 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     pages = [
-      HomeScreen(onGoToExercise: () => selectTab(1)),
+      HomeScreen(onGoToExercise: () => selectTab(1), onGoToRanking: () => selectTab(2)),
       const ExerciseScreen(),
-      const RankingScreen(), // 랭킹 페이지가 준비되면 교체
+      const RankingScreen(),
       const MyScreen(),
     ];
   }
