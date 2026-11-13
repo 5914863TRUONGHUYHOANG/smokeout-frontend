@@ -1,5 +1,30 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: '햄냥이 설정',
+      theme: ThemeData(
+        primaryColor: const Color(0xFF556B2F),
+        scaffoldBackgroundColor: const Color(0xFFF4F6F0),
+        fontFamily: 'sans-serif',
+      ),
+      home: const SettingsScreen(), // 앱을 켜면 설정 화면이 바로 나타남
+    );
+  }
+}
+
+// -------------------------------------------------------------
+// 설정 화면 (Settings Screen) 통합 코드
+// -------------------------------------------------------------
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
@@ -7,147 +32,122 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F0),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 200,
-            child: CustomPaint(
-              painter: LayeredHillsPainter(),
-            ),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 상단 타이틀 및 설명 영역
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: const [
-                          Icon(Icons.settings, color: Color(0xFF3B5323), size: 28),
-                          SizedBox(width: 8),
-                          Text(
-                            '설정',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF3B5323),
-                            ),
-                          ),
-                        ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        '설정',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF3B5323),
+                        ),
                       ),
-                      // 상단 오른쪽 고양이 로고 (유지)
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: Image.asset(
-                          'assets/running_cat.png',
-                          fit: BoxFit.contain,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.pets, color: Color(0xFF3B5323), size: 40);
-                          },
+                      SizedBox(height: 4),
+                      Text(
+                        '더 나은 금연과 운동을 위한 설정을 관리해요!',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  
-                  // 프로필 카드 (추후 원하는 이미지로 쉽게 교체 가능하도록 수정)
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE5EFE2),
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.03),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // 프로필 카드 영역 (이름: 햄냥이)
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
-                    child: Row(
-                      children: [
-                        // [프로필 사진 영역] 추후 Image.asset('원하는경로') 또는 NetworkImage 로 변경 가능
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: const Color(0xFF556B2F),
-                            border: Border.all(color: Colors.white, width: 2),
-                          ),
-                          child: const Icon(
-                            Icons.person, 
-                            color: Colors.white, 
-                            size: 30,
-                          ), // 추후 사진이 들어갈 수 있는 기본 아이콘 형태 (원하시면 Image로 교체 가능)
-                        ),
-                        const SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              '햄냥이',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2C3E1B),
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '내 프로필 관리',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                      ],
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    // 프로필 아바타 및 아이콘 영역
+                    const CircleAvatar(
+                      radius: 28,
+                      backgroundColor: Color(0xFFD6E5D0),
+                      child: Icon(
+                        Icons.person,
+                        size: 32,
+                        color: Color(0xFF556B2F),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    '금연 설정',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF3B5323),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        ListTile(
-                          leading: Icon(Icons.smoke_free, color: Color(0xFF3B5323)),
-                          title: Text('금연 목표'),
-                          trailing: Text('30일 >', style: TextStyle(color: Colors.grey)),
+                        Text(
+                          '햄냥이',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2C3E1B),
+                          ),
                         ),
-                        Divider(height: 1),
-                        ListTile(
-                          leading: Icon(Icons.calendar_today, color: Color(0xFF3B5323)),
-                          title: Text('금연 시작일'),
-                          trailing: Text('2025.09.01 >', style: TextStyle(color: Colors.grey)),
+                        SizedBox(height: 2),
+                        Text(
+                          'hamnyangi@email.com',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE5EFE2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.edit, size: 14, color: Color(0xFF556B2F)),
+                          SizedBox(width: 4),
+                          Text(
+                            '프로필 수정',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF556B2F),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // 알림 설정 섹션
+              Row(
+                children: const [
+                  Icon(Icons.notifications, color: Color(0xFF3B5323), size: 20),
+                  SizedBox(width: 8),
+                  Text(
                     '알림 설정',
                     style: TextStyle(
                       fontSize: 16,
@@ -155,120 +155,171 @@ class SettingsScreen extends StatelessWidget {
                       color: Color(0xFF3B5323),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: [
+                    SwitchListTile(
+                      secondary: const Icon(Icons.notifications_active, color: Color(0xFF3B5323)),
+                      title: const Text('운동 알림', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                      subtitle: const Text('추천 운동 및 운동 시간 알림을 받아요', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      value: true,
+                      activeColor: const Color(0xFF556B2F),
+                      onChanged: (bool value) {},
                     ),
-                    child: Column(
-                      children: [
-                        SwitchListTile(
-                          secondary: const Icon(Icons.directions_run, color: Color(0xFF3B5323)),
-                          title: const Text('운동 알림'),
-                          value: true,
-                          activeColor: const Color(0xFF556B2F),
-                          onChanged: (bool value) {},
-                        ),
-                        const Divider(height: 1),
-                        SwitchListTile(
-                          secondary: const Icon(Icons.smoke_free, color: Color(0xFF3B5323)),
-                          title: const Text('금연 알림'),
-                          value: true,
-                          activeColor: const Color(0xFF556B2F),
-                          onChanged: (bool value) {},
-                        ),
-                      ],
+                    const Divider(height: 1),
+                    SwitchListTile(
+                      secondary: const Icon(Icons.smoke_free, color: Color(0xFF3B5323)),
+                      title: const Text('금연 알림', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                      subtitle: const Text('금연 상태와 팁을 알려드려요', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      value: true,
+                      activeColor: const Color(0xFF556B2F),
+                      onChanged: (bool value) {},
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  const Text(
-                    '기타',
+                    const Divider(height: 1),
+                    SwitchListTile(
+                      secondary: const Icon(Icons.emoji_events, color: Color(0xFF3B5323)),
+                      title: const Text('랭킹 알림', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                      subtitle: const Text('주간 랭킹 업데이트를 알려드려요', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                      value: false,
+                      activeColor: const Color(0xFF556B2F),
+                      onChanged: (bool value) {},
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // 포인트 및 혜택 섹션
+              Row(
+                children: const [
+                  Icon(Icons.star, color: Color(0xFF3B5323), size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    '포인트 및 혜택',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF3B5323),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.monetization_on, color: Colors.amber, size: 36),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: const [
-                        ListTile(
-                          leading: Icon(Icons.lock_outline, color: Color(0xFF3B5323)),
-                          title: Text('개인정보'),
-                          trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                        ),
-                        Divider(height: 1),
-                        ListTile(
-                          leading: Icon(Icons.info_outline, color: Color(0xFF3B5323)),
-                          title: Text('앱 정보'),
-                          trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-                        ),
+                        Text('보유 크레딧', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                        SizedBox(height: 2),
+                        Text('지금까지 모은 크레딧을 확인해보세요!', style: TextStyle(fontSize: 12, color: Colors.grey)),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  Center(
-                    child: TextButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.logout, color: Color(0xFF556B2F)),
-                      label: const Text(
-                        '로그아웃',
-                        style: TextStyle(color: Color(0xFF556B2F), fontWeight: FontWeight.bold),
+                    const Spacer(),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFE5EFE2),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: const Color(0xFFE5EFE2),
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.star, color: Colors.amber, size: 16),
+                          SizedBox(width: 4),
+                          Text(
+                            '250 P >',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF3B5323)),
+                          ),
+                        ],
                       ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // 앱 정보 섹션
+              Row(
+                children: const [
+                  Icon(Icons.settings_suggest, color: Color(0xFF3B5323), size: 20),
+                  SizedBox(width: 8),
+                  Text(
+                    '앱 정보',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF3B5323),
                     ),
                   ),
                 ],
               ),
-            ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  children: const [
+                    ListTile(
+                      leading: Icon(Icons.info_outline, color: Color(0xFF3B5323)),
+                      title: Text('버전 정보'),
+                      trailing: Text('v1.0.0', style: TextStyle(color: Colors.grey)),
+                    ),
+                    Divider(height: 1),
+                    ListTile(
+                      leading: Icon(Icons.privacy_tip_outlined, color: Color(0xFF3B5323)),
+                      title: Text('개인정보 처리방침'),
+                      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    ),
+                    Divider(height: 1),
+                    ListTile(
+                      leading: Icon(Icons.support_agent, color: Color(0xFF3B5323)),
+                      title: Text('고객센터'),
+                      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // 로그아웃 버튼 영역
+              Center(
+                child: TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.logout, color: Color(0xFF556B2F)),
+                  label: const Text(
+                    '로그아웃',
+                    style: TextStyle(color: Color(0xFF556B2F), fontWeight: FontWeight.bold),
+                  ),
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFFE5EFE2),
+                    minimumSize: const Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
-}
-
-// 배경 산 모양 Custom Painter
-class LayeredHillsPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paintBack = Paint()
-      ..color = const Color(0xFFD6E5D0)
-      ..style = PaintingStyle.fill;
-
-    final pathBack = Path();
-    pathBack.lineTo(0, size.height - 60);
-    pathBack.quadraticBezierTo(size.width * 0.3, size.height - 20, size.width * 0.7, size.height - 80);
-    pathBack.quadraticBezierTo(size.width * 0.9, size.height - 100, size.width, size.height - 50);
-    pathBack.lineTo(size.width, 0);
-    pathBack.close();
-    canvas.drawPath(pathBack, paintBack);
-
-    final paintFront = Paint()
-      ..color = const Color(0xFFC4D9BC)
-      ..style = PaintingStyle.fill;
-
-    final pathFront = Path();
-    pathFront.lineTo(0, size.height - 25);
-    pathFront.quadraticBezierTo(size.width * 0.25, size.height - 60, size.width * 0.6, size.height - 35);
-    pathFront.quadraticBezierTo(size.width * 0.85, size.height - 10, size.width, size.height - 45);
-    pathFront.lineTo(size.width, 0);
-    pathFront.close();
-    canvas.drawPath(pathFront, paintFront);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
