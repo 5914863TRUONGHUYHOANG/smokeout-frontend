@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'setting.dart' show SettingsScreen;
+import 'exercise.dart' show ExerciseScreen;
 
 void main() {
   runApp(const MyApp());
@@ -38,9 +40,6 @@ class _MyScreenState extends State<MyScreen> {
   String nickname = '사용자';
   String email = 'user@example.com';
 
-  bool isExerciseNotificationOn = true;
-  bool isSmokeNotificationOn = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,8 +57,8 @@ class _MyScreenState extends State<MyScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Text(
                         'Smoke Out',
                         style: TextStyle(
@@ -84,20 +83,7 @@ class _MyScreenState extends State<MyScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => SettingsScreen(
-                            exerciseOn: isExerciseNotificationOn,
-                            smokeOn: isSmokeNotificationOn,
-                            onExerciseChanged: (value) {
-                              setState(() {
-                                isExerciseNotificationOn = value;
-                              });
-                            },
-                            onSmokeChanged: (value) {
-                              setState(() {
-                                isSmokeNotificationOn = value;
-                              });
-                            },
-                          ),
+                          builder: (_) => const SettingsScreen(),
                         ),
                       );
                     },
@@ -366,6 +352,22 @@ class _MyScreenState extends State<MyScreen> {
         selectedLabelStyle: const TextStyle(
           fontWeight: FontWeight.bold,
         ),
+
+        onTap: (index) {
+          if (index == 0) {
+            // 홈 화면으로 돌아가기
+            Navigator.popUntil(context, ((route) => route.isFirst));
+          } else if (index == 1) {
+            // 운동 화면으로 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ExerciseScreen(),
+              ),
+            );
+          }
+        },
+        
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -395,7 +397,7 @@ class _MyScreenState extends State<MyScreen> {
       borderRadius: BorderRadius.circular(24),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.03),
+          color: Colors.black.withValues(alpha: 0.03),
           blurRadius: 10,
           offset: const Offset(0, 4),
         ),
@@ -712,152 +714,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ],
-    );
-  }
-}
-
-
-// ==========================================
-// SETTINGS SCREEN
-// ==========================================
-
-class SettingsScreen extends StatefulWidget {
-  final bool exerciseOn;
-  final bool smokeOn;
-  final ValueChanged<bool> onExerciseChanged;
-  final ValueChanged<bool> onSmokeChanged;
-
-  const SettingsScreen({
-    super.key,
-    required this.exerciseOn,
-    required this.smokeOn,
-    required this.onExerciseChanged,
-    required this.onSmokeChanged,
-  });
-
-  @override
-  State<SettingsScreen> createState() =>
-      _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  late bool exerciseNotification;
-  late bool smokeNotification;
-
-  @override
-  void initState() {
-    super.initState();
-    exerciseNotification = widget.exerciseOn;
-    smokeNotification = widget.smokeOn;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: background,
-        elevation: 0,
-        title: const Text(
-          '설정',
-          style: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: const BackButton(color: Colors.black87),
-      ),
-
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(
-                        Icons.notifications,
-                        color: green,
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        '알림 설정',
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    activeTrackColor: green,
-                    title: const Text(
-                      '운동 알림',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: const Text(
-                      '운동 시작을 알려드려요!',
-                    ),
-                    secondary: const Icon(
-                      Icons.directions_run,
-                      color: green,
-                    ),
-                    value: exerciseNotification,
-                    onChanged: (value) {
-                      setState(() {
-                        exerciseNotification = value;
-                      });
-                      widget.onExerciseChanged(value);
-                    },
-                  ),
-
-                  const Divider(),
-
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    activeTrackColor: green,
-                    title: const Text(
-                      '금연 알림',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: const Text(
-                      '금연을 응원하는 알림을 받아보세요!',
-                    ),
-                    secondary: const Icon(
-                      Icons.smoke_free,
-                      color: green,
-                    ),
-                    value: smokeNotification,
-                    onChanged: (value) {
-                      setState(() {
-                        smokeNotification = value;
-                      });
-                      widget.onSmokeChanged(value);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
