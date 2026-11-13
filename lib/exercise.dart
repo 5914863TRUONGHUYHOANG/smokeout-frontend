@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
+
 import 'exercise_dialog.dart';
-import 'profile_screen.dart';
 
+const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
+const Color card = Color.fromRGBO(253, 253, 246, 1.0);
+const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
+const Color green = Color.fromRGBO(91, 126, 61, 1.0);
+const Color lightGreen = Color.fromRGBO(232, 242, 207, 1.0);
+const Color litGreen = Color(0xFFEEF2DE);
+const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
+const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
-class ExerciseScreen extends StatelessWidget {
+class ExerciseScreen extends StatefulWidget {
   const ExerciseScreen({super.key});
 
+  @override
+  State<ExerciseScreen> createState() => _ExerciseScreenState();
+}
+
+class _ExerciseScreenState extends State<ExerciseScreen> {
+  double cravingLevel = 3; // 탭을 전환해도 IndexedStack이 상태를 유지
+  int selectedDuration = 0;
   // 테마 색상
-  static const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
-  static const Color card = Color.fromRGBO(253, 253, 246, 1.0);
-  static const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
-  static const Color green = Color.fromRGBO(91, 126, 61, 1.0);
-  static const Color lightGreen = Color.fromRGBO(232, 242, 207, 1.0);
-  static const Color litGreen = Color(0xFFEEF2DE);
-  static const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
-  static const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFF8F7F0),
 
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -74,228 +81,280 @@ class ExerciseScreen extends StatelessWidget {
 
       // 운동 화면 본문
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 1. 상단 제목
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(border: Border.all()),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('지금 나에게 맞는 운동을 찾아보세요'),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 700),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(24),
 
-                    //욕구 강도
-                    Column(
-                      children: [
-                        Row(
+                        decoration: BoxDecoration(
+                          color: card,
+                          border: Border.all(color: borderGreen, width: 1.5),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(width: 10),
-                            Row(children: [Text('욕구강도'), Text('(0~10)')]),
-
-                            Spacer(),
-
-                            Container(
-                              width: 70,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(5),
+                            const Text(
+                              '지금 나에게 맞는 운동을 찾아보세요',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: darkGreen,
+                                letterSpacing: -0.5,
                               ),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // 욕구 강도
+                            Column(
+                              children: [
+                                Row(
                                   children: [
-                                    Text('7', style: TextStyle(fontSize: 16)),
-                                    Text(' / ', style: TextStyle(fontSize: 12)),
-                                    Text('10', style: TextStyle(fontSize: 12)),
+                                    const SizedBox(width: 10),
+                                    const Row(
+                                      children: [
+                                        Text(
+                                          '욕구 강도',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: darkGreen,
+                                          ),
+                                        ),
+                                        SizedBox(width: 6),
+                                        Text(
+                                          '(0~10)',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w400,
+                                            color: textGray,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Spacer(),
+                                    Container(
+                                      width: 70,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              cravingLevel.toInt().toString(),
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              ' / ',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                            Text(
+                                              '10',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
                                   ],
+                                ),
+
+                                Slider(
+                                  min: 0,
+                                  value: cravingLevel,
+                                  max: 10,
+                                  divisions: 10,
+                                  onChanged: (double newValue) {
+                                    setState(() {
+                                      cravingLevel = newValue;
+                                    });
+                                  },
+                                ),
+
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 24),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('0'),
+                                      Text('1'),
+                                      Text('2'),
+                                      Text('3'),
+                                      Text('4'),
+                                      Text('5'),
+                                      Text('6'),
+                                      Text('7'),
+                                      Text('8'),
+                                      Text('9'),
+                                      Text('10'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // 운동 시간
+                            Row(
+                              children: [
+                                const Text(
+                                  '운동 시간',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: darkGreen,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+
+                                Expanded(
+                                  child: SegmentedButton<int>(
+                                    segments: const [
+                                      ButtonSegment(
+                                        value: 0,
+                                        label: Text('전체'),
+                                      ),
+                                      ButtonSegment(
+                                        value: 5,
+                                        label: Text('5분'),
+                                      ),
+                                      ButtonSegment(
+                                        value: 10,
+                                        label: Text('10분'),
+                                      ),
+                                      ButtonSegment(
+                                        value: 15,
+                                        label: Text('15분'),
+                                      ),
+                                      ButtonSegment(
+                                        value: 30,
+                                        label: Text('30분'),
+                                      ),
+                                    ],
+
+                                    selected: {selectedDuration},
+
+                                    onSelectionChanged:
+                                        (Set<int> newSelection) {
+                                          setState(() {
+                                            selectedDuration =
+                                                newSelection.first;
+                                          });
+                                        },
+
+                                    showSelectedIcon: false,
+
+                                    // 선택 버튼 디자인
+                                    style: ButtonStyle(
+                                      textStyle: WidgetStateProperty.all(
+                                        const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+
+                                      foregroundColor:
+                                          WidgetStateProperty.resolveWith((
+                                            states,
+                                          ) {
+                                            return states.contains(
+                                                  WidgetState.selected,
+                                                )
+                                                ? Colors.white
+                                                : darkGreen;
+                                          }),
+
+                                      backgroundColor:
+                                          WidgetStateProperty.resolveWith((
+                                            states,
+                                          ) {
+                                            return states.contains(
+                                                  WidgetState.selected,
+                                                )
+                                                ? green
+                                                : const Color(0xFFFDFDF6);
+                                          }),
+
+                                      side: WidgetStateProperty.all(
+                                        const BorderSide(color: borderGreen),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 20),
+
+                            // 운동 추천 버튼
+                            Align(
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const ExerciseRecommendDialog();
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: darkGreen,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 12,
+                                      horizontal: 24,
+                                    ),
+                                    child: Text(
+                                      '맞춤 운동 추천받기',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10),
+
+                            const SizedBox(height: 12),
                           ],
-                        ),
-
-                        Slider(
-                          min: 0,
-                          value: 7, // 현재 위치
-                          max: 10,
-                          divisions: 10, // 1씩 움직이기
-                          onChanged: (_) {},
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text('0'),
-                              Text('1'),
-                              Text('2'),
-                              Text('3'),
-                              Text('4'),
-                              Text('5'),
-                              Text('6'),
-                              Text('7'),
-                              Text('8'),
-                              Text('9'),
-                              Text('10'),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // 현재 체력상태
-                    // 일단은 삭제
-
-                    // 운동시간
-                    SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('운동시간'),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: SegmentedButton(
-                            segments: [
-                              ButtonSegment(value: 0, label: Text('전체')),
-                              ButtonSegment(value: 5, label: Text('5분')),
-                              ButtonSegment(value: 10, label: Text('10분')),
-                              ButtonSegment(value: 15, label: Text('15분')),
-                              ButtonSegment(value: 30, label: Text('30분')),
-                            ],
-                            selected: {0},
-                            onSelectionChanged: (newSelection) {},
-                            showSelectedIcon: false,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    SizedBox(height: 12),
-
-                    // 운동 추천 버튼
-                    Align(
-                      alignment: Alignment.center,
-                      child:GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const ExerciseRecommendDialog();
-                            },
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: darkGreen,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 24,
-                            ),
-                            child: Text(
-                              '맞춤 운동 추천받기',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 12),
-                  ],
+                  ),
                 ),
               ),
-
-              const SizedBox(height: 16),
-              // 여기에 운동 화면 레이아웃 추가
-            ],
-          ),
+            );
+          },
         ),
       ),
 
-      bottomNavigationBar: BottomAppBar(
-        height: 70,
-        color: const Color(0xFFF8F7F0),
-        elevation: 0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _BottomItem(
-              icon: Icons.home,
-              label: '홈',
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            _BottomItem(
-              icon: Icons.directions_run,
-              label: '운동',
-              selected: true,
-            ),
-            _BottomItem(icon: Icons.emoji_events_outlined, label: '랭킹'),
-            _BottomItem(
-              icon: Icons.person_outline,
-              label: 'MY',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BottomItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback? onTap;
-
-  const _BottomItem({
-    required this.icon,
-    required this.label,
-    this.selected = false,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 24, color: selected ? Colors.black : Colors.grey),
-
-            const SizedBox(height: 4),
-
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: selected ? Colors.black : Colors.grey,
-                fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

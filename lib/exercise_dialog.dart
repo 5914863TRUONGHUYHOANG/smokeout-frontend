@@ -1,6 +1,16 @@
-
 import 'package:flutter/material.dart';
+
 import 'exercise_detail.dart';
+
+// 테마 색상
+const Color cream = Color.fromRGBO(248, 248, 236, 1.0);
+const Color card = Color.fromRGBO(253, 253, 246, 1.0);
+const Color darkGreen = Color.fromRGBO(63, 92, 43, 1.0);
+const Color green = Color.fromRGBO(91, 126, 61, 1.0);
+const Color lightGreen = Color.fromRGBO(232, 242, 207, 1.0);
+const Color litGreen = Color(0xFFEEF2DE);
+const Color borderGreen = Color.fromRGBO(210, 220, 190, 1.0);
+const Color textGray = Color.fromRGBO(95, 95, 85, 1.0);
 
 // 추천 운동 5가지
 const recommendedExercises = <ExerciseData>[
@@ -10,12 +20,7 @@ const recommendedExercises = <ExerciseData>[
     difficulty: '낮음',
     category: '호흡',
     description: '같은 길이로 들이쉬고 멈추고 내쉬며 흥분 상태를 진정시킵니다.',
-    steps: [
-      '4초 들이마시기',
-      '4초 멈추기',
-      '4초 내쉬기',
-      '4초 멈추기',
-    ],
+    steps: ['4초 들이마시기', '4초 멈추기', '4초 내쉬기', '4초 멈추기'],
     repeat: '총 6회 반복',
   ),
   ExerciseData(
@@ -82,9 +87,8 @@ class ExerciseRecommendDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      backgroundColor: cream,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: 410,
@@ -100,6 +104,7 @@ class ExerciseRecommendDialog extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
+                  color: darkGreen,
                 ),
               ),
 
@@ -107,7 +112,7 @@ class ExerciseRecommendDialog extends StatelessWidget {
 
               const Text(
                 '현재 욕구와 조건에 맞는 운동 5가지를 추천해드려요.',
-                style: TextStyle(fontSize: 13),
+                style: TextStyle(fontSize: 13, color: darkGreen),
                 textAlign: TextAlign.center,
               ),
 
@@ -161,17 +166,16 @@ class ExerciseRecommendDialog extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ExerciseDetailScreen(
-              exercise: exercise,
-            ),
+            builder: (context) => ExerciseDetailScreen(exercise: exercise),
           ),
         );
       },
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
+          border: Border.all(color: borderGreen, width: 1.5),
           borderRadius: BorderRadius.circular(12),
+          color: litGreen,
         ),
         child: Row(
           children: [
@@ -195,6 +199,7 @@ class ExerciseRecommendDialog extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
+                      color: green,
                     ),
                   ),
                   Text(
@@ -205,7 +210,7 @@ class ExerciseRecommendDialog extends StatelessWidget {
               ),
             ),
 
-            const Icon(Icons.chevron_right),
+            const Icon(Icons.chevron_right, color: green),
           ],
         ),
       ),
