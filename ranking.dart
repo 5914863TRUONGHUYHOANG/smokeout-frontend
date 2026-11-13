@@ -1,5 +1,30 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Hamnyangi Ranking Test',
+      theme: ThemeData(
+        // 전체 앱의 기본 배경색 설정 (세이지 그린 톤)
+        scaffoldBackgroundColor: const Color(0xFFF4F6F0),
+      ),
+      // 앱을 실행하자마자 랭킹 화면이 바로 보이도록 설정
+      home: const RankingScreen(),
+    );
+  }
+}
+
+// -------------------------------------------------------------
+// 랭킹 화면 (RankingScreen) 통합 코드
+// -------------------------------------------------------------
 class RankingScreen extends StatefulWidget {
   const RankingScreen({super.key});
 
